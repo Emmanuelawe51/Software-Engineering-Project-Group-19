@@ -25,7 +25,7 @@ public class GameLauncher extends Application {
         // Create the top half of the hexagonal grid
         for (int i = 0; i < maxColumns / 2 + 1; i++) {
             for (int j = 0; j < i + 5; j++) {
-                double x = j * height + 100 + (maxColumns / 2 - i) * height / 2;
+                double x = j * height + 100 + ((double) maxColumns / 2 - i) * height / 2;
                 double y = i * 1.5 * side + 100;
                 Polygon hexagon = createHexagon(x, y, side);
                 root.getChildren().add(hexagon);
@@ -35,7 +35,7 @@ public class GameLauncher extends Application {
         // Create the bottom half of the hexagonal grid
         for (int i = maxColumns / 2 - 1; i >= 0; i--) {
             for (int j = 0; j < i + 5; j++) {
-                double x = j * height + 100 + (maxColumns / 2 - i) * height / 2;
+                double x = j * height + 100 + ((double) maxColumns / 2 - i) * height / 2;
                 double y = (maxColumns - i - 1) * 1.5 * side + 100;
                 Polygon hexagon = createHexagon(x, y, side);
                 root.getChildren().add(hexagon);
