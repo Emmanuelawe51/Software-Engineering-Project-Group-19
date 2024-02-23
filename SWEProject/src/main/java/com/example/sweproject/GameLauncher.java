@@ -3,6 +3,8 @@ package com.example.sweproject;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -11,6 +13,9 @@ import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GameLauncher extends Application {
@@ -24,15 +29,16 @@ public class GameLauncher extends Application {
         Stage stage = new Stage();
         Group root = new Group();
         Scene scene = new Scene(root, Color.BLACK);
-        // this is the icon for the window of the game, you may need to change the source of the image location as this
-        // was the only way I could get it to work rn
-        Image icon = new Image("C:\\Users\\emman\\OneDrive\\Documents\\GitHub\\Software-Engineering-Projec\\SWEProject\\src\\main\\java\\com\\example\\sweproject\\MainIcon.png");
+        //loading the main icon from the resources directory
+        Image icon = new Image(getClass().getResource("/MainIcon.png").toExternalForm());
         stage.getIcons().add(icon);
         //side length and height of hexagon
         double side = 50;
         double height = side * Math.sqrt(3);
         // Maximum number of columns in the middle of the hexagonal grid
         int maxColumns = 9;
+        // using this to label the edges of the hexagon
+        int edgeCount = 1;
 
         // Create the top half of the hexagonal grid
         for (int i = 0; i < maxColumns / 2 + 1; i++) {
@@ -41,6 +47,19 @@ public class GameLauncher extends Application {
                 double x = j * height + 100 + ((double) maxColumns / 2 - i) * height / 2;
                 //changes y coordinate each time a hexagon is placed
                 double y = i * 1.5 * side + 100;
+
+                //numnber labeling trial
+                /*if(i == 0 || j == 0 || j == i + 4)
+                {
+                    Text text = new Text();
+                    text.setText(Integer.toString(edgeCount));
+                    edgeCount++;
+                    text.setX(x);
+                    text.setY(y);
+                    text.setFont(Font.font("Verdana", 40));
+                    text.setFill(Color.YELLOW);
+                    root.getChildren().add(text);
+                }*/
                 //calls create hexagon function to place it
                 Polygon hexagon = createHexagon(x, y, side);
                 //adds to stage
@@ -53,12 +72,27 @@ public class GameLauncher extends Application {
             for (int j = 0; j < i + 5; j++) {
                 double x = j * height + 100 + ((double) maxColumns / 2 - i) * height / 2;
                 double y = (maxColumns - i - 1) * 1.5 * side + 100;
+
+                //numnber labeling trial
+                /*if(i == 0 || j == 0 || j == i + 4)
+                {
+                    Text text = new Text();
+                    text.setText(Integer.toString(edgeCount));
+                    edgeCount++;
+                    text.setX(x);
+                    text.setY(y);
+                    text.setFont(Font.font("Verdana", 40));
+                    text.setFill(Color.YELLOW);
+                    root.getChildren().add(text);
+                }*/
+
                 Polygon hexagon = createHexagon(x, y, side);
                 root.getChildren().add(hexagon);
             }
         }
         //sets title of window/stage
         stage.setTitle("Black Box+");
+
 
         //below code not needed right now
        // stage.setFullScreen(true);
@@ -106,6 +140,17 @@ public class GameLauncher extends Application {
                 ((Group) hexagon.getParent()).getChildren().add(Atom);
                 // Increment the Atom counter
                 AtomCount++;
+
+                // Drawing the area of influence
+                double dottedCircleRadius = side * 1.75;
+                Circle dottedCircle = new Circle(x, y - side, dottedCircleRadius);
+                // Set stroke style to dotted
+                dottedCircle.setStroke(Color.WHITE); // Set line color
+                dottedCircle.setStrokeWidth(1); // Set line width
+                dottedCircle.getStrokeDashArray().addAll(2d, 5d); // Adjust the lengths of dashes and gaps as needed
+                dottedCircle.setFill(Color.TRANSPARENT); // Set fill color to transparent
+                // Add the dotted circle to the same parent as the hexagon
+                ((Group) hexagon.getParent()).getChildren().add(dottedCircle);
             }
         });
         return hexagon;
