@@ -59,8 +59,10 @@ public class GameLauncher extends Application {
 
                 //calls create hexagon function to place it
                 Hexagon hexagon = new Hexagon(x, y, side);
+
                 //adds to stage
                 root.getChildren().add(hexagon.getHexagon());
+
             }
         }
 
@@ -73,6 +75,14 @@ public class GameLauncher extends Application {
                 Hexagon hexagon = new Hexagon(x, y, side);
                 root.getChildren().add(hexagon.getHexagon());
             }
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            double x = 35 * i + 235;
+            double y = 35;
+
+            Arrow arrow = new Arrow(x, y, 10);
+            root.getChildren().add(arrow.getArrow());
         }
         //sets title of window/stage
         stage.setTitle("Black Box+");
