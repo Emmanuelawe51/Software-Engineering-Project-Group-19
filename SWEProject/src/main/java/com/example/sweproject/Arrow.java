@@ -36,7 +36,7 @@ public class Arrow {
                 x - height / 3, y - side
         );
         // This line makes the fill color of the arrow transparent
-        arrow.setFill(Color.GREEN);
+        arrow.setFill(Color.TRANSPARENT);
         // This line sets the outline color of the arrow to yellow
         arrow.setStroke(Color.YELLOW);
 
@@ -48,7 +48,7 @@ public class Arrow {
     }
     //resets the colour of the arrow when the mouse is no longer hovering
     private void addMouseExitHandler() {arrow.setOnMouseExited(event -> {
-        arrow.setFill(Color.GREEN);
+        arrow.setFill(Color.TRANSPARENT);
     });
 
     }
