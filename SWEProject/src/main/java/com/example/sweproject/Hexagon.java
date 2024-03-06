@@ -52,7 +52,7 @@ public class Hexagon {
 
     private void addMouseExitHandler() {hexagon.setOnMouseExited(event -> {
         // Perform actions when mouse exits hexagon
-        hexagon.setStroke(Color.YELLOW);
+        hexagon.setFill(Color.TRANSPARENT);
     });
 
     }
@@ -60,9 +60,10 @@ public class Hexagon {
     private void addMouseEnterHandler() {
         hexagon.setOnMouseEntered(event -> {
             // Perform actions when mouse enters hexagon
-            hexagon.setStroke(Color.DARKRED);
+            hexagon.setFill(Color.DARKRED);
         });
     }
+
 
     public Polygon getHexagon() {
         return hexagon;
