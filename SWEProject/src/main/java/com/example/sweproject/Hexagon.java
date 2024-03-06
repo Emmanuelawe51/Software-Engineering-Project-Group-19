@@ -10,10 +10,10 @@ import javafx.scene.shape.Polygon;
 
 public class Hexagon {
 
-    private double x;
-    private double y;
-    private double side;
-    private Polygon hexagon;
+    private final double x;
+    private final double y;
+    private final double side;
+    private final Polygon hexagon;
 
 
     public Hexagon(double x, double y, double side) {
