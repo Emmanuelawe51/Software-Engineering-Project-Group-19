@@ -2,9 +2,6 @@ package com.example.sweproject;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 
 public class Arrow {
@@ -21,6 +18,7 @@ public class Arrow {
         this.arrow = createArrow();
         addMouseEnterHandler();
         addMouseExitHandler();
+        ShootRay();
     }
 
     //creates the arrow
@@ -46,6 +44,19 @@ public class Arrow {
     public Polygon getArrow() {
         return arrow;
     }
+    public void ShootRay(){
+        arrow.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
+            // Calculate the direction of the ray based on the rotation of the arrow
+            double angle = Math.toRadians(arrow.getRotate());
+            double rayEndX = x * Math.cos(angle);
+            double rayEndY = y  * Math.sin(angle);
+            // Create the ray
+            Ray ray = new Ray(x, y, rayEndX, rayEndY);
+            // Add the ray to the root group
+            GameLauncher.root.getChildren().addAll(ray.getOutline(), ray.getLine());
+        });
+    }
+
     //resets the colour of the arrow when the mouse is no longer hovering
     private void addMouseExitHandler() {arrow.setOnMouseExited(event -> {
         arrow.setFill(Color.TRANSPARENT);
