@@ -39,7 +39,7 @@ public class Hexagon {
             GameLauncher.root.getChildren().add(atom);
             GameLauncher.AtomCount++;
 
-            double dottedCircleRadius = side * 1.75;
+            double dottedCircleRadius = side * 1.73;
             Circle dottedCircle = new Circle(x, y - side, dottedCircleRadius);
             dottedCircle.setStroke(Color.WHITE);
             dottedCircle.setStrokeWidth(1);

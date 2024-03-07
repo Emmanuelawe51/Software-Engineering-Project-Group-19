@@ -15,16 +15,39 @@ public class Arrow {
 
     private double x;
     private double y;
+    //stores the place in the 2d array the arrow is
+    private int[] coord = new int[2];
     private double side;
     private Polygon arrow;
     //Arrow takes in the x and y coordiantes you want to print the arrow and the side length
+    public static enum Direction {
+        EAST,
+        NORTHEAST,
+        SOUTHEAST,
+        WEST,
+        SOUTHWEST,
+        NORTHWEST
+    }
+    private Direction arrowDirection;
 
     private int arrowNum;
-    public Arrow(double x, double y, double side) {
+    public Arrow(double x, double y, double side, Direction direction) {
         this.x = x;
         this.y = y;
         this.side = side;
         this.arrow = createArrow();
+        this.arrowDirection = direction;
+        addMouseEnterHandler();
+        addMouseExitHandler();
+        ShootRay();
+    }
+    public Arrow(double x, double y, double side, Direction direction, int[] coord) {
+        this.x = x;
+        this.y = y;
+        this.side = side;
+        this.arrow = createArrow();
+        this.arrowDirection = direction;
+        this.coord = coord;
         addMouseEnterHandler();
         addMouseExitHandler();
         ShootRay();
@@ -114,17 +137,79 @@ public class Arrow {
     public Polygon getArrow() {
         return arrow;
     }
-    public void ShootRay(){
+    public void ShootRay() {
         arrow.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
-            // Calculate the direction of the ray based on the rotation of the arrow
-            double angle = Math.toRadians(arrow.getRotate());
-            double rayEndX = x * Math.cos(angle);
-            double rayEndY = y  * Math.sin(angle);
-            // Create the ray
-            Ray ray = new Ray(x, y, rayEndX, rayEndY);
-            // Add the ray to the root group
-            GameLauncher.root.getChildren().addAll(ray.getOutline(), ray.getLine());
+            //when the mouse is clicked set the coords to the coords initialised
+            int xCord = coord[0];
+            int yCord = coord[1];
+            //getting the coordinates of the center of the hexagons we need
+            double rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
+            double rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
+            //starting with the arrows location
+            double rayStartX = x;
+            double rayStartY = y;
+
+            if (arrowDirection == Direction.EAST) {
+
+                //while the coordinate is valid
+                while (isValidCoordinate(xCord, yCord)) {
+                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                    root.getChildren().add(ray.getOutline());
+
+                    //reseting the starting position of the next ray to the end of this one
+                    rayStartX = rayEndX;
+                    rayStartY = rayEndY;
+
+                    // Move to the next coordinate
+                    yCord++;
+                    if (isValidCoordinate(xCord, yCord)) {
+                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
+                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
+                    }
+                }
+            } else if (arrowDirection == Direction.WEST) {
+                while (isValidCoordinate(xCord, yCord)) {
+                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                    root.getChildren().add(ray.getOutline());
+
+                    //reseting the starting position of the next ray to the end of this one
+                    rayStartX = rayEndX;
+                    rayStartY = rayEndY;
+
+                    // Move to the next coordinate
+                    yCord--;
+                    if (isValidCoordinate(xCord, yCord)) {
+                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
+                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
+                    }
+                }
+
+            } else if (arrowDirection == Direction.NORTHWEST) {
+                while (isValidCoordinate(xCord, yCord)) {
+                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                    root.getChildren().add(ray.getOutline());
+
+                    //reseting the starting position of the next ray to the end of this one
+                    rayStartX = rayEndX;
+                    rayStartY = rayEndY;
+
+                    // Move to the next coordinate
+                    xCord--;
+                    if(xCord < 4)
+                        yCord--;
+                    if (isValidCoordinate(xCord, yCord)) {
+                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
+                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
+                    }
+                }
+
+            }
         });
+    }
+    //function to check validity
+    private boolean isValidCoordinate(int x, int y) {
+        return x >= 0 && x < GameLauncher.coordinatesOfCenters.length &&
+                y >= 0 && y < GameLauncher.coordinatesOfCenters[x].length && GameLauncher.coordinatesOfCenters[x][y] != null;
     }
 
     //resets the colour of the arrow when the mouse is no longer hovering

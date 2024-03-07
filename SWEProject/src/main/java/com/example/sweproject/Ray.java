@@ -5,9 +5,10 @@ import javafx.scene.shape.Line;
 public class Ray {
     private final double setStartX;
     private final double setStartY;
+    private Arrow.Direction rayDirection;
     Line line;
     Line outline;
-    public Ray(double startX, double startY, double setEndX, double setEndY)
+    public Ray(double startX, double startY, double setEndX, double setEndY, Arrow.Direction direction)
     {
         this.setStartX=startX;
         this.setStartY= startY;
@@ -28,6 +29,8 @@ public class Ray {
         outline.setEndY(setEndY);
         outline.setStroke(Color.DEEPSKYBLUE);
         outline.setStrokeWidth(5);
+
+        this.rayDirection = direction;
         // this is just here to see the coordinates of the ray
        System.out.println("Ray created from (" + startX + ", " + startY + ") to (" + setEndX + ", " + setEndY + ")"); // Add this line
 
