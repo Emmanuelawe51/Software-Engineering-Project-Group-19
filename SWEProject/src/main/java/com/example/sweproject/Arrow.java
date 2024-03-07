@@ -203,6 +203,69 @@ public class Arrow {
                     }
                 }
 
+            } else if (arrowDirection == Direction.NORTHEAST) {
+                while (isValidCoordinate(xCord, yCord)) {
+                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                    root.getChildren().add(ray.getOutline());
+
+                    //reseting the starting position of the next ray to the end of this one
+                    rayStartX = rayEndX;
+                    rayStartY = rayEndY;
+
+                    // Move to the next coordinate
+                    xCord--;
+
+                    if(xCord>3)
+                        yCord++;
+
+                    if (isValidCoordinate(xCord, yCord)) {
+                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
+                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
+                    }
+                }
+
+            } else if (arrowDirection == Direction.SOUTHEAST) {
+                while (isValidCoordinate(xCord, yCord)) {
+                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                    root.getChildren().add(ray.getOutline());
+
+                    //reseting the starting position of the next ray to the end of this one
+                    rayStartX = rayEndX;
+                    rayStartY = rayEndY;
+
+                    // Move to the next coordinate
+                    xCord++;
+                    if(xCord<5)
+                    yCord++;
+
+
+                    if (isValidCoordinate(xCord, yCord)) {
+                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
+                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
+                    }
+                }
+
+            } else if (arrowDirection == Direction.SOUTHWEST) {
+                while (isValidCoordinate(xCord, yCord)) {
+                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                    root.getChildren().add(ray.getOutline());
+
+                    //reseting the starting position of the next ray to the end of this one
+                    rayStartX = rayEndX;
+                    rayStartY = rayEndY;
+
+                    // Move to the next coordinate
+                    xCord++;
+                    if(xCord>4)
+                        yCord--;
+
+
+                    if (isValidCoordinate(xCord, yCord)) {
+                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
+                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
+                    }
+                }
+
             }
         });
     }

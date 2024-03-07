@@ -147,7 +147,7 @@ public class GameLauncher extends Application {
             {
                 x = 583 + (i * 34.8);
                 y = 99.5 + (i * 60);
-                Arrow arrow1 = new Arrow(x, y, 10, Arrow.Direction.SOUTHWEST);
+                Arrow arrow1 = new Arrow(x, y, 10, Arrow.Direction.SOUTHWEST,new int[]{i + 1, 5 + i});
                 // Rotate the arrow by 30 degrees
                 arrow1.getArrow().setRotate(30);
                 root.getChildren().add(arrow1.getArrow());
@@ -185,11 +185,11 @@ public class GameLauncher extends Application {
 
             // Rotate the arrow by 60 degrees
             if(i%2 == 0) {
-                Arrow arrow = new Arrow(x, y, 10, Arrow.Direction.NORTHWEST,new int[]{i/2, 8 - i});
+                Arrow arrow = new Arrow(x, y, 10, Arrow.Direction.NORTHEAST,new int[]{8, i/2});
                 arrow.getArrow().setRotate(90);
                 root.getChildren().add(arrow.getArrow());
             }else{
-                Arrow arrow = new Arrow(x, y, 10, Arrow.Direction.NORTHEAST);
+                Arrow arrow = new Arrow(x, y, 10, Arrow.Direction.NORTHWEST,new int[]{8, i/2});
                 arrow.getArrow().setRotate(30);
                 root.getChildren().add(arrow.getArrow());
             }
@@ -206,7 +206,7 @@ public class GameLauncher extends Application {
 
             x = 97.6 + (i * 34.8);
             y = 331 + (i * 60);
-            Arrow arrow1 = new Arrow(x, y, 10, Arrow.Direction.NORTHEAST);
+            Arrow arrow1 = new Arrow(x, y, 10, Arrow.Direction.NORTHEAST, new int[]{i + 4, 0});
             // Rotate the arrow by 30 degrees
             arrow1.getArrow().setRotate(90);
             root.getChildren().add(arrow1.getArrow());
@@ -219,7 +219,7 @@ public class GameLauncher extends Application {
             {
                 double x = 202 - (i * 34.8);
                 double y = 98.5 + (i * 60);
-                Arrow arrow1 = new Arrow(x, y, 10, Arrow.Direction.SOUTHEAST, new int[]{i, 0});
+                Arrow arrow1 = new Arrow(x, y, 10, Arrow.Direction.SOUTHEAST, new int[]{i + 1, 0});
                 // Rotate the arrow by 30 degrees
                 arrow1.getArrow().setRotate(90);
                 root.getChildren().add(arrow1.getArrow());
