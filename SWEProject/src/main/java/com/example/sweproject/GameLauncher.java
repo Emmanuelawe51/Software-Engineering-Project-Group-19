@@ -103,67 +103,27 @@ public class GameLauncher extends Application {
                 root.getChildren().add(arrow1.getArrow());
             }
         }
-
-        //second face right-angled arrows
-        for (int i = 0; i < 5; i++)
-        {
-            double x = 224.8 - (i * 34.8);
-            double y = 65 + (i * 60) ;
-            Arrow arrow = new Arrow(x, y, 10);
-            // Rotate the arrow by 30 degrees
-            arrow.getArrow().setRotate(30);
-            root.getChildren().add(arrow.getArrow());
-
-            if(i < 4)
-            {
-                x = 202 - (i * 34.8);
-                y = 98.5 + (i * 60);
-                Arrow arrow1 = new Arrow(x, y, 10);
-                // Rotate the arrow by 30 degrees
-                arrow1.getArrow().setRotate(90);
-                root.getChildren().add(arrow1.getArrow());
-            }
-        }
-        //third face right-angled arrows
-        for (int i = 0; i < 4; i++)
-        {
-            double x = 120.4 + (i * 34.8);
-            double y = 366.5 + (i * 60) ;
-            Arrow arrow = new Arrow(x, y, 10);
-            // Rotate the arrow by 30 degrees
-            arrow.getArrow().setRotate(30);
-            root.getChildren().add(arrow.getArrow());
-        }
         //fifth face right-angled arrows
         for (int i = 0; i < 4; i++)
         {
-            double x = 665.7 - (i * 34.8);
-            double y = 366.5 + (i * 60) ;
-            Arrow arrow = new Arrow(x, y, 10);
-            // Rotate the arrow by 30 degrees
-            arrow.getArrow().setRotate(90);
-            root.getChildren().add(arrow.getArrow());
-        }
-        // third face diagonal
-        for (int i = 0; i < 4; i++) {
-            double x = 97.6 + (i * 34.8);
-            double y = 331 + (i * 60);
-            Arrow arrow = new Arrow(x, y, 10);
-            // Rotate the arrow by 30 degrees
-            arrow.getArrow().setRotate(90);
-            root.getChildren().add(arrow.getArrow());
-        }
-        // fifth face diagonal
-        for (int i = 0; i < 4; i++) {
+
             double x = 687 - (i * 34.8);
             double y = 332 + (i * 60);
+            Arrow arrow1 = new Arrow(x, y, 10);
+            // Rotate the arrow by 30 degrees
+            arrow1.getArrow().setRotate(30);
+            root.getChildren().add(arrow1.getArrow());
+
+            x = 665.7 - (i * 34.8);
+            y = 366.5 + (i * 60) ;
             Arrow arrow = new Arrow(x, y, 10);
             // Rotate the arrow by 30 degrees
-            arrow.getArrow().setRotate(30);
+            arrow.getArrow().setRotate(90);
             root.getChildren().add(arrow.getArrow());
+
         }
         //bottom face
-        for (int i = 0; i < 10; i++)
+        for (int i = 9; i >= 0; i--)
         {
             double x = 34.8 * i + 235;
             double y;
@@ -181,6 +141,48 @@ public class GameLauncher extends Application {
             }
             root.getChildren().add(arrow.getArrow());
         }
+        //third face right-angled arrows
+        for (int i = 3; i >= 0; i--)
+        {
+            double x = 120.4 + (i * 34.8);
+            double y = 366.5 + (i * 60) ;
+            Arrow arrow = new Arrow(x, y, 10);
+            // Rotate the arrow by 30 degrees
+            arrow.getArrow().setRotate(30);
+            root.getChildren().add(arrow.getArrow());
+
+            x = 97.6 + (i * 34.8);
+            y = 331 + (i * 60);
+            Arrow arrow1 = new Arrow(x, y, 10);
+            // Rotate the arrow by 30 degrees
+            arrow1.getArrow().setRotate(90);
+            root.getChildren().add(arrow1.getArrow());
+        }
+
+        //second face right-angled arrows
+        for (int i = 4 ; i >= 0; i--)
+        {
+            if(i < 4)
+            {
+                double x = 202 - (i * 34.8);
+                double y = 98.5 + (i * 60);
+                Arrow arrow1 = new Arrow(x, y, 10);
+                // Rotate the arrow by 30 degrees
+                arrow1.getArrow().setRotate(90);
+                root.getChildren().add(arrow1.getArrow());
+            }
+            double x = 224.8 - (i * 34.8);
+            double y = 65 + (i * 60) ;
+            Arrow arrow = new Arrow(x, y, 10);
+            // Rotate the arrow by 30 degrees
+            arrow.getArrow().setRotate(30);
+            root.getChildren().add(arrow.getArrow());
+
+
+        }
+
+
+
         //sets title of window/stage
         stage.setTitle("Black Box+");
 

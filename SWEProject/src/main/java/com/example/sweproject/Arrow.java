@@ -65,12 +65,41 @@ public class Arrow {
                 text.setX(x + 10);
                 text.setY(y);
             }
-        } else if (arrowNum <= 25) {
-            text.setX(x);
+        } else if (arrowNum <= 28) {
+
             if (arrowNum % 2 == 0) {
+                text.setX(x);
+                text.setY(y + 10);
+            } else {
+                text.setX(x + 10);
+                text.setY(y);
+            }
+        } else if (arrowNum <= 37) {
+
+            if (arrowNum % 2 == 0) {
+                text.setX(x);
+                text.setY(y + 10);
+            } else {
+                text.setX(x - 8);
+                text.setY(y + 10);
+            }
+        } else if (arrowNum <= 45) {
+
+            if (arrowNum % 2 == 0) {
+                text.setX(x - 18);
                 text.setY(y);
             } else {
+                text.setX(x - 4);
+                text.setY(y + 11);
+            }
+        } else if (arrowNum <= 55) {
+
+            if (arrowNum % 2 == 0) {
+                text.setX(x - 18);
                 text.setY(y);
+            } else {
+                text.setX(x - 10);
+                text.setY(y - 11);
             }
         }
         text.setFill(WHITE);
