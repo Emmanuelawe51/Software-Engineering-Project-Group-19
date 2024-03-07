@@ -58,7 +58,7 @@ public class GameLauncher extends Application {
                 double y = i * 1.5 * side + 100;
 
 
-                Text text = new Text("0");
+                Text text = new Text("o");
                 // Calculate the position to place the text in the center of the hexagon
                 // Adjust the x-coordinate based on the text size to center it properly
                 double textX = x - text.getLayoutBounds().getWidth() / 2;
