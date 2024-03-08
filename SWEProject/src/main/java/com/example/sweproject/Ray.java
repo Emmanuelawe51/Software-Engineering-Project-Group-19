@@ -5,13 +5,17 @@ import javafx.scene.shape.Line;
 public class Ray {
     private final double setStartX;
     private final double setStartY;
+    private final double setEndX;
+    private final double setEndY;
     private Arrow.Direction rayDirection;
     Line line;
     Line outline;
-    public Ray(double startX, double startY, double setEndX, double setEndY, Arrow.Direction direction)
+    public Ray(double startX, double startY, double setendX, double setendY, Arrow.Direction direction)
     {
         this.setStartX=startX;
         this.setStartY= startY;
+        this.setEndY= setendY;
+        this.setEndX= setendX;
         // creating the inner white line
         line = new Line();
         line.setStartX(setStartX);
@@ -39,4 +43,5 @@ public class Ray {
     public Line getLine() {
         return line;
     }
+
 }
