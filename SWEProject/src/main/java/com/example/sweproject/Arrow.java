@@ -279,7 +279,6 @@ public class Arrow {
     private void addMouseExitHandler() {arrow.setOnMouseExited(event -> {
         arrow.setFill(Color.TRANSPARENT);
     });
-
     }
     //sets the colour of the arrow when the mouse is hovering above the arrow
     private void addMouseEnterHandler() {
