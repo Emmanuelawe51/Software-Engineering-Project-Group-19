@@ -6,8 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
-import static com.example.sweproject.GameLauncher.numberLabel;
-import static com.example.sweproject.GameLauncher.root;
+import static com.example.sweproject.GameLauncher.*;
 import static javafx.scene.paint.Color.RED;
 import static javafx.scene.paint.Color.WHITE;
 
@@ -21,12 +20,16 @@ public class Arrow {
     private Polygon arrow;
     //Arrow takes in the x and y coordiantes you want to print the arrow and the side length
     public static enum Direction {
-        EAST,
-        NORTHEAST,
-        SOUTHEAST,
+        NORTHWEST,
         WEST,
         SOUTHWEST,
-        NORTHWEST
+        SOUTHEAST,
+        EAST,
+        NORTHEAST;
+        //this method will help make changing the direction of the ray easier
+        public Direction iterate(int i) {
+            return values()[(ordinal() + i) % values().length];
+        }
     }
     private Direction arrowDirection;
 
@@ -139,140 +142,94 @@ public class Arrow {
     }
     public void ShootRay() {
         arrow.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
-            //when the mouse is clicked set the coords to the coords initialised
             int xCord = coord[0];
             int yCord = coord[1];
             //getting the coordinates of the center of the hexagons we need
-            double rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
-            double rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
-            //starting with the arrows location
+            double rayEndX = coordinatesOfCenters[xCord][yCord].getX();
+            double rayEndY = coordinatesOfCenters[xCord][yCord].getY();
             double rayStartX = x;
             double rayStartY = y;
 
-            if (arrowDirection == Direction.EAST) {
+            boolean absorbed = false;
 
-                //while the coordinate is valid
-                while (isValidCoordinate(xCord, yCord)) {
-                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
-                    root.getChildren().add(ray.getOutline());
+            while (isValidCoordinate(xCord, yCord) && !absorbed) {
 
-                    //reseting the starting position of the next ray to the end of this one
-                    rayStartX = rayEndX;
-                    rayStartY = rayEndY;
-
-                    // Move to the next coordinate
-                    yCord++;
-                    if (isValidCoordinate(xCord, yCord)) {
-                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
-                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
+                if (isValidCoordinate(xCord, yCord) && coordinatesOfCenters[xCord][yCord].getNoOfAreaOfInfluence() != 0) {
+                        Coordinate nextPoint = coordinatesOfCenters[xCord][yCord];
+                    System.out.println("detected");
+                        if (nextPoint.getPointOfAreaOfInfluence() == this.arrowDirection.iterate(3)) { //iterating by 3 produces the opposite direction so there is a direct collision
+                            absorbed = true;
+                            System.out.println("absorbed");
+                        } else if (nextPoint.getNoOfAreaOfInfluence() == 1) {   //when there is a single collision i.e. 60 degrees
+                            System.out.println(arrowDirection);
+                            this.arrowDirection = nextPoint.getPointOfAreaOfInfluence();
+                            System.out.println("detected1");
+                            System.out.println(arrowDirection);
+                        } else if (nextPoint.getNoOfAreaOfInfluence() == 2) {   //when there is two collisions i.e. 120 degrees
+                            System.out.println(arrowDirection);
+                            this.arrowDirection = this.arrowDirection.iterate(2);
+                            System.out.println("detected2");
+                            System.out.println(arrowDirection);
+                        } else {                                                //when there are greater than 2 i.e. 180 degrees
+                            System.out.println(arrowDirection);
+                            this.arrowDirection = this.arrowDirection.iterate(3);
+                            System.out.println("detected3");
+                            System.out.println(arrowDirection);
+                        }
                     }
-                }
-            } else if (arrowDirection == Direction.WEST) {
-                while (isValidCoordinate(xCord, yCord)) {
-                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
-                    root.getChildren().add(ray.getOutline());
 
-                    //reseting the starting position of the next ray to the end of this one
-                    rayStartX = rayEndX;
-                    rayStartY = rayEndY;
+                // Create and add the ray
+                Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                root.getChildren().add(ray.getOutline());
 
-                    // Move to the next coordinate
-                    yCord--;
-                    if (isValidCoordinate(xCord, yCord)) {
-                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
-                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
-                    }
-                }
+                // Update ray starting position for the next iteration
+                rayStartX = rayEndX;
+                rayStartY = rayEndY;
 
-            } else if (arrowDirection == Direction.NORTHWEST) {
-                while (isValidCoordinate(xCord, yCord)) {
-                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
-                    root.getChildren().add(ray.getOutline());
-
-                    //reseting the starting position of the next ray to the end of this one
-                    rayStartX = rayEndX;
-                    rayStartY = rayEndY;
-
-                    // Move to the next coordinate
-                    xCord--;
-                    if(xCord < 4)
-                        yCord--;
-                    if (isValidCoordinate(xCord, yCord)) {
-                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
-                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
-                    }
-                }
-
-            } else if (arrowDirection == Direction.NORTHEAST) {
-                while (isValidCoordinate(xCord, yCord)) {
-                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
-                    root.getChildren().add(ray.getOutline());
-
-                    //reseting the starting position of the next ray to the end of this one
-                    rayStartX = rayEndX;
-                    rayStartY = rayEndY;
-
-                    // Move to the next coordinate
-                    xCord--;
-
-                    if(xCord>3)
+                // Move to the next coordinate based on arrow direction
+                switch (arrowDirection) {
+                    case EAST:
                         yCord++;
-
-                    if (isValidCoordinate(xCord, yCord)) {
-                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
-                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
-                    }
-                }
-
-            } else if (arrowDirection == Direction.SOUTHEAST) {
-                while (isValidCoordinate(xCord, yCord)) {
-                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
-                    root.getChildren().add(ray.getOutline());
-
-                    //reseting the starting position of the next ray to the end of this one
-                    rayStartX = rayEndX;
-                    rayStartY = rayEndY;
-
-                    // Move to the next coordinate
-                    xCord++;
-                    if(xCord<5)
-                    yCord++;
-
-
-                    if (isValidCoordinate(xCord, yCord)) {
-                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
-                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
-                    }
-                }
-
-            } else if (arrowDirection == Direction.SOUTHWEST) {
-                while (isValidCoordinate(xCord, yCord)) {
-                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
-                    root.getChildren().add(ray.getOutline());
-
-                    //reseting the starting position of the next ray to the end of this one
-                    rayStartX = rayEndX;
-                    rayStartY = rayEndY;
-
-                    // Move to the next coordinate
-                    xCord++;
-                    if(xCord>4)
+                        break;
+                    case WEST:
                         yCord--;
-
-
-                    if (isValidCoordinate(xCord, yCord)) {
-                        rayEndX = GameLauncher.coordinatesOfCenters[xCord][yCord].getX();
-                        rayEndY = GameLauncher.coordinatesOfCenters[xCord][yCord].getY();
-                    }
+                        break;
+                    case NORTHWEST:
+                        xCord--;
+                        if(xCord < 4)
+                            yCord--;
+                        break;
+                    case NORTHEAST:
+                        xCord--;
+                        if(xCord>3)
+                            yCord++;
+                        break;
+                    case SOUTHEAST:
+                        xCord++;
+                        if(xCord<5)
+                            yCord++;
+                        break;
+                    case SOUTHWEST:
+                        xCord++;
+                        if(xCord>4)
+                            yCord--;
+                        break;
                 }
 
-            }
+
+                // Update ray ending position if the next coordinate is valid
+                if (isValidCoordinate(xCord, yCord)) {
+                    rayEndX = coordinatesOfCenters[xCord][yCord].getX();
+                    rayEndY = coordinatesOfCenters[xCord][yCord].getY();
+                }
+                }
         });
     }
+
     //function to check validity
     private boolean isValidCoordinate(int x, int y) {
-        return x >= 0 && x < GameLauncher.coordinatesOfCenters.length &&
-                y >= 0 && y < GameLauncher.coordinatesOfCenters[x].length && GameLauncher.coordinatesOfCenters[x][y] != null;
+        return x >= 0 && x < coordinatesOfCenters.length &&
+                y >= 0 && y < coordinatesOfCenters[x].length && coordinatesOfCenters[x][y] != null;
     }
 
     //resets the colour of the arrow when the mouse is no longer hovering

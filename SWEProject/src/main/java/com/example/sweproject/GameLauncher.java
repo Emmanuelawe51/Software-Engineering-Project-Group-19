@@ -77,7 +77,7 @@ public class GameLauncher extends Application {
 
 
                 //calls create hexagon function to place it
-                Hexagon hexagon = new Hexagon(x, y, side);
+                Hexagon hexagon = new Hexagon(x, y, side, i, j);
 
                 //adds to stage
                 root.getChildren().add(hexagon.getHexagon());
@@ -91,7 +91,7 @@ public class GameLauncher extends Application {
                 double x = j * height + 100 + ((double) maxColumns / 2 - i) * height / 2;
                 double y = (maxColumns - i - 1) * 1.5 * side + 100;
 
-                Hexagon hexagon = new Hexagon(x, y, side);
+                Hexagon hexagon = new Hexagon(x, y, side, (8 - i), j);
                 root.getChildren().add(hexagon.getHexagon());
 
                 Text text = new Text("o");
@@ -255,6 +255,7 @@ public class GameLauncher extends Application {
         stage.show();
 
     }
+
 
 }
 

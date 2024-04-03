@@ -1,10 +1,26 @@
 package com.example.sweproject;
 
 
-//this is a class to store coordinates no other function
 public class Coordinate {
     private double x;
     private double y;
+    private int noOfAreaOfInfluence = 0;
+    //this variable hold the value of where the hexagon is relative to an atom
+    //holds the direction of the point relative to the atom
+    private Arrow.Direction pointOfAreaOfInfluence;
+    public void setPointOfAreaOfInfluence(Arrow.Direction direction) {
+        this.pointOfAreaOfInfluence = direction;
+        this.noOfAreaOfInfluence++;
+
+
+    }
+
+    public Arrow.Direction getPointOfAreaOfInfluence() {
+        return pointOfAreaOfInfluence;
+    }
+    public int getNoOfAreaOfInfluence(){
+        return noOfAreaOfInfluence;
+    }
 
     public Coordinate(double x, double y) {
         this.x = x;
