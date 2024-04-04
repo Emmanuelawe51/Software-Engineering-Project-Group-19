@@ -20,15 +20,15 @@ public class Arrow {
     private Polygon arrow;
     //Arrow takes in the x and y coordiantes you want to print the arrow and the side length
     public static enum Direction {
-        NORTHWEST,
-        WEST,
-        SOUTHWEST,
-        SOUTHEAST,
+        NORTHEAST,
         EAST,
-        NORTHEAST;
+        SOUTHEAST,
+        SOUTHWEST,
+        WEST,
+        NORTHWEST;
         //this method will help make changing the direction of the ray easier
         public Direction iterate(int i) {
-            return values()[(ordinal() + i) % values().length];
+            return values()[(ordinal() + i) % 6];
         }
     }
     private Direction arrowDirection;
@@ -162,7 +162,13 @@ public class Arrow {
                             System.out.println("absorbed");
                         } else if (nextPoint.getNoOfAreaOfInfluence() == 1) {   //when there is a single collision i.e. 60 degrees
                             System.out.println(arrowDirection);
-                            this.arrowDirection = nextPoint.getPointOfAreaOfInfluence();
+
+                            if(nextPoint.getPointOfAreaOfInfluence().iterate(2) == this.arrowDirection) {
+                                this.arrowDirection = nextPoint.getPointOfAreaOfInfluence().iterate(1);
+                            } else{
+                                this.arrowDirection = nextPoint.getPointOfAreaOfInfluence().iterate(5);
+                            }
+
                             System.out.println("detected1");
                             System.out.println(arrowDirection);
                         } else if (nextPoint.getNoOfAreaOfInfluence() == 2) {   //when there is two collisions i.e. 120 degrees
