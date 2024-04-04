@@ -11,16 +11,30 @@ public class Coordinate {
     private int deflectionType = 0;
     //this variable hold the value of where the hexagon is relative to an atom
     //holds the direction of the point relative to the atom
-    private Arrow.Direction pointOfAreaOfInfluence;
+    private Arrow.Direction pointOfAreaOfInfluence1;
+    private Arrow.Direction pointOfAreaOfInfluence2;
     public void setPointOfAreaOfInfluence(Arrow.Direction direction) {
-        this.pointOfAreaOfInfluence = direction;
-        this.deflectionType++;
+        if(deflectionType == 0)
+        {
+            pointOfAreaOfInfluence1 = direction;
+            deflectionType++;
+        } else if (deflectionType == 1) {
+            pointOfAreaOfInfluence2 = direction;
+            deflectionType++;
+            if(!(direction.iterate(1) == pointOfAreaOfInfluence1 || direction.iterate(5) == pointOfAreaOfInfluence1))
+                deflectionType = 3;
+        } else {
+            deflectionType = 3;
+        }
 
 
     }
 
-    public Arrow.Direction getPointOfAreaOfInfluence() {
-        return pointOfAreaOfInfluence;
+    public Arrow.Direction getPointOfAreaOfInfluence1() {
+        return pointOfAreaOfInfluence1;
+    }
+    public Arrow.Direction getPointOfAreaOfInfluence2() {
+        return pointOfAreaOfInfluence2;
     }
     public int getDeflectionType(){
         return deflectionType;

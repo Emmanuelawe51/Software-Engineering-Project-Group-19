@@ -155,26 +155,34 @@ public class Arrow {
             while (isValidCoordinate(xCord, yCord) && !absorbed) {
 
                 if (isValidCoordinate(xCord, yCord) && coordinatesOfCenters[xCord][yCord].getDeflectionType() != 0) {
-                        Coordinate nextPoint = coordinatesOfCenters[xCord][yCord];
-                        Direction dOfAoi = nextPoint.getPointOfAreaOfInfluence();
-                        int defType = nextPoint.getDeflectionType();
+                    Coordinate nextPoint = coordinatesOfCenters[xCord][yCord];
+                    Direction dOfAoi = nextPoint.getPointOfAreaOfInfluence1();
+                    int defType = nextPoint.getDeflectionType();
 
                     System.out.println("detected");
-                        if (dOfAoi == this.arrowDirection.iterate(3)) {    //when there is an absorbtion
-                            absorbed = true;
-                            System.out.println("absorbed");
-                        } else if (defType == 1) {                           //when there is a single collision i.e. 120 degrees
-                            if(dOfAoi.iterate(2) == this.arrowDirection) {  //deflection logic
-                                this.arrowDirection = dOfAoi.iterate(1);
-                            } else{
-                                this.arrowDirection = dOfAoi.iterate(5);
-                            }
-                        } else if (defType == 2) {                              //when there is a 60 degree deflection
-                            this.arrowDirection = dOfAoi;
-                        } else {                                                //when there is a 180 degrees i.e reflection
-                            this.arrowDirection = this.arrowDirection.iterate(3);
+                    if (dOfAoi == this.arrowDirection.iterate(3) && defType == 1) {    //when there is an absorbtion
+                        absorbed = true;
+                        System.out.println("absorbed");
+                    } else if (defType == 1) {                           //when there is a single collision i.e. 60 degrees
+                        if(dOfAoi.iterate(2) == this.arrowDirection) {  //deflection logic
+                            this.arrowDirection = dOfAoi.iterate(1);
+                        } else{
+                            this.arrowDirection = dOfAoi.iterate(5);
                         }
+                        System.out.println("deflected 60");
+                    } else if (defType == 2) {                          //when there is a 120 degree deflection
+                        if(this.arrowDirection == dOfAoi.iterate(3)){
+                            this.arrowDirection = nextPoint.getPointOfAreaOfInfluence2();
+                            System.out.println(nextPoint.getPointOfAreaOfInfluence2());
+                        } else {
+                            this.arrowDirection = dOfAoi;
+                        }
+                        System.out.println("deflected 120");
+                    } else {                                                //when there is a 180 degrees i.e reflection
+                        this.arrowDirection = this.arrowDirection.iterate(3);
+                        System.out.println("reflected 180");
                     }
+                }
 
                 // Create and add the ray
                 Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
@@ -220,7 +228,7 @@ public class Arrow {
                     rayEndX = coordinatesOfCenters[xCord][yCord].getX();
                     rayEndY = coordinatesOfCenters[xCord][yCord].getY();
                 }
-                }
+            }
         });
     }
 
