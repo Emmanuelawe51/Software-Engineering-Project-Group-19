@@ -154,33 +154,25 @@ public class Arrow {
 
             while (isValidCoordinate(xCord, yCord) && !absorbed) {
 
-                if (isValidCoordinate(xCord, yCord) && coordinatesOfCenters[xCord][yCord].getNoOfAreaOfInfluence() != 0) {
+                if (isValidCoordinate(xCord, yCord) && coordinatesOfCenters[xCord][yCord].getDeflectionType() != 0) {
                         Coordinate nextPoint = coordinatesOfCenters[xCord][yCord];
+                        Direction dOfAoi = nextPoint.getPointOfAreaOfInfluence();
+                        int defType = nextPoint.getDeflectionType();
+
                     System.out.println("detected");
-                        if (nextPoint.getPointOfAreaOfInfluence() == this.arrowDirection.iterate(3)) { //iterating by 3 produces the opposite direction so there is a direct collision
+                        if (dOfAoi == this.arrowDirection.iterate(3)) {    //when there is an absorbtion
                             absorbed = true;
                             System.out.println("absorbed");
-                        } else if (nextPoint.getNoOfAreaOfInfluence() == 1) {   //when there is a single collision i.e. 60 degrees
-                            System.out.println(arrowDirection);
-
-                            if(nextPoint.getPointOfAreaOfInfluence().iterate(2) == this.arrowDirection) {
-                                this.arrowDirection = nextPoint.getPointOfAreaOfInfluence().iterate(1);
+                        } else if (defType == 1) {                           //when there is a single collision i.e. 120 degrees
+                            if(dOfAoi.iterate(2) == this.arrowDirection) {  //deflection logic
+                                this.arrowDirection = dOfAoi.iterate(1);
                             } else{
-                                this.arrowDirection = nextPoint.getPointOfAreaOfInfluence().iterate(5);
+                                this.arrowDirection = dOfAoi.iterate(5);
                             }
-
-                            System.out.println("detected1");
-                            System.out.println(arrowDirection);
-                        } else if (nextPoint.getNoOfAreaOfInfluence() == 2) {   //when there is two collisions i.e. 120 degrees
-                            System.out.println(arrowDirection);
-                            this.arrowDirection = this.arrowDirection.iterate(2);
-                            System.out.println("detected2");
-                            System.out.println(arrowDirection);
-                        } else {                                                //when there are greater than 2 i.e. 180 degrees
-                            System.out.println(arrowDirection);
+                        } else if (defType == 2) {                              //when there is a 60 degree deflection
+                            this.arrowDirection = dOfAoi;
+                        } else {                                                //when there is a 180 degrees i.e reflection
                             this.arrowDirection = this.arrowDirection.iterate(3);
-                            System.out.println("detected3");
-                            System.out.println(arrowDirection);
                         }
                     }
 

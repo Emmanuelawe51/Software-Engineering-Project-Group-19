@@ -57,6 +57,7 @@ public class Hexagon {
             int numCols = GameLauncher.coordinatesOfCenters[0].length;
 
             // Set area of influence for adjacent hexagons
+            // creates a circle of area of influence around the atom each with their own direction which is relative to the atom
             if (j + 1 < numCols && GameLauncher.coordinatesOfCenters[i][j+1] != null)
                 GameLauncher.coordinatesOfCenters[i][j+1].setPointOfAreaOfInfluence(Arrow.Direction.EAST);
 
@@ -173,7 +174,7 @@ public class Hexagon {
             for (int j = 0; j < initialNum && j < numCols; j++) {
                 if (coordinatesOfCenters[i][j] != null) {
                     Coordinate coordinate = coordinatesOfCenters[i][j];
-                    System.out.print(coordinate.getNoOfAreaOfInfluence() + "   ");
+                    System.out.print(coordinate.getDeflectionType() + "   ");
                 } else {
                     System.out.print("0 ");
                 }
