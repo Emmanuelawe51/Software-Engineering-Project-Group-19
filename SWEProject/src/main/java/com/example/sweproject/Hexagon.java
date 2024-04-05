@@ -1,5 +1,5 @@
 package com.example.sweproject;
-
+import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -7,17 +7,26 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.input.KeyCode;
+
+import java.util.*;
+
+import static com.example.sweproject.GameLauncher.*;
 
 public class Hexagon {
 
+    private static boolean isVisible = true;
+    private static final List<Circle> atoms = new ArrayList<>();
+    private static final List<Circle> rings = new ArrayList<>();
     private final double xCord;
     private final double yCord;
     //hold the relative position of the hexagon in the coordinatesOfCenters array
     private final int i, j;
+    public static int guesses = 0;
     private final double side;
     private final Polygon hexagon;
 
-
+    Map<Polygon, List<Circle>> hexagonToCircles = new HashMap<>();
     public Hexagon(double xCord, double yCord, double side, int i, int j) {
         this.xCord = xCord;
         this.yCord = yCord;
@@ -28,22 +37,28 @@ public class Hexagon {
         addMouseEnterHandler();
         addMouseExitHandler();
         addMouseClickHandler();
+
     }
 
 
 
     private void addMouseClickHandler() {
+
         hexagon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
         if (GameLauncher.AtomCount < 6) {
-            Circle atom = new Circle(xCord, yCord - side, side / 2);
+            Circle atomCircle = new Circle(xCord, yCord - side, side / 2);
             RadialGradient gradient = new RadialGradient(
                     0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE,
                     new javafx.scene.paint.Stop(0, Color.RED),
                     new javafx.scene.paint.Stop(1, Color.DARKRED)
             );
-            atom.setFill(gradient);
-            GameLauncher.root.getChildren().add(atom);
+            hexagonToCircles.computeIfAbsent(hexagon, k -> new ArrayList<>()).add(atomCircle);
+
+
+            atomCircle.setFill(gradient);
+            GameLauncher.root.getChildren().add(atomCircle);
             GameLauncher.AtomCount++;
+            atoms.add(atomCircle);
 
             double dottedCircleRadius = side * 1.73;
             Circle dottedCircle = new Circle(xCord, yCord - side, dottedCircleRadius);
@@ -52,6 +67,7 @@ public class Hexagon {
             dottedCircle.getStrokeDashArray().addAll(2d, 5d);
             dottedCircle.setFill(Color.TRANSPARENT);
             GameLauncher.root.getChildren().add(dottedCircle);
+
 
             int numRows = GameLauncher.coordinatesOfCenters.length;
             int numCols = GameLauncher.coordinatesOfCenters[0].length;
@@ -86,10 +102,60 @@ public class Hexagon {
                     GameLauncher.coordinatesOfCenters[i+1][j-1].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHWEST);
                 else if (j >= 0 && GameLauncher.coordinatesOfCenters[i+1][j] != null)
                     GameLauncher.coordinatesOfCenters[i+1][j].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHWEST);
+                rings.add(dottedCircle);
+
             }
+            hexagonToCircles.computeIfAbsent(hexagon, k -> new ArrayList<>()).add(atomCircle);
+
         }
+
+            if (GameLauncher.AtomCount >= 6 && !isVisible && guesses < 6) {
+                // Check if the hexagon has an atom
+                if (!hexagonToCircles.getOrDefault(hexagon, Collections.emptyList()).isEmpty()) {
+                    System.out.println("Atom found");
+                    guesses++;
+                } else {
+                    System.out.println("No atom");
+                    guesses++;
+                    if (GameLauncher.round%2 == 0){
+                        pTwoscore = pTwoscore + 5;
+                    }else{
+                        pOneScore = pOneScore + 5;
+                    }
+                }
+
+            }
+
+            if(guesses == 6){
+                System.out.println("All Guesses Complete press P to start next round");
+                scene.setOnKeyPressed(keyEvent -> {
+                    if (keyEvent.getCode() == KeyCode.P) {
+                        for (Circle atom : atoms) {
+                            GameLauncher.root.getChildren().remove(atom);
+                        }
+                        for (Circle ring : rings) {
+                            GameLauncher.root.getChildren().remove(ring);
+                        }
+                        atoms.clear();
+                        rings.clear();
+                        GameLauncher.round++;
+                        guesses = 0;
+                        GameLauncher.startBoard();
+                    }
+                });
+            }
+
         printNoOfAreaOfInfluence(GameLauncher.coordinatesOfCenters);
     });
+    }
+    public static void hideAtoms() {
+        isVisible = !isVisible;
+        for (Circle atom : atoms) {
+            atom.setVisible(isVisible);
+        }
+        for (Circle ring : rings) {
+            ring.setVisible(isVisible);
+        }
     }
 
     private void addMouseExitHandler() {hexagon.setOnMouseExited(event -> {
@@ -111,7 +177,7 @@ public class Hexagon {
         return hexagon;
     }
 
-    public void addAtom(Group root)
+   /* public void addAtom(Group root)
     {
         //creating the atom
         Circle atom = new Circle(xCord, yCord - side, side / 2);
@@ -131,7 +197,7 @@ public class Hexagon {
         dottedCircle.getStrokeDashArray().addAll(2d, 5d);
         dottedCircle.setFill(Color.TRANSPARENT);
         root.getChildren().add(dottedCircle);
-    }
+    }*/
 
     private Polygon createHexagon() {
         Polygon hexagon = new Polygon();

@@ -3,12 +3,17 @@ package com.example.sweproject;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.sweproject.GameLauncher.*;
 import static javafx.scene.paint.Color.RED;
 import static javafx.scene.paint.Color.WHITE;
+
 
 public class Arrow {
 
@@ -221,8 +226,6 @@ public class Arrow {
                             yCord--;
                         break;
                 }
-
-
                 // Update ray ending position if the next coordinate is valid
                 if (isValidCoordinate(xCord, yCord)) {
                     rayEndX = coordinatesOfCenters[xCord][yCord].getX();

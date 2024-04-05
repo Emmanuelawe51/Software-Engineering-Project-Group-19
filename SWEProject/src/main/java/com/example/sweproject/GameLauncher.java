@@ -1,17 +1,21 @@
 package com.example.sweproject;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-import static javafx.scene.paint.Color.RED;
-import static javafx.scene.paint.Color.WHITE;
+import static javafx.scene.paint.Color.*;
 
 public class GameLauncher extends Application {
     public static int AtomCount = 0;
@@ -22,9 +26,19 @@ public class GameLauncher extends Application {
     public static int numberLabel = 0;
     //stores the coordinates of the center of the hexagons
 
+    //round number
+    public static int round;
+
+    //score of players one and two
+    public static int pOneScore = 0;
+    public static int pTwoscore = 0;
+
+
     public static Coordinate[][] coordinatesOfCenters = new Coordinate[9][9];
 
     public static void main(String[] args) {
+        pOneScore = 0;
+        pTwoscore = 0;
         launch(args);
     }
 
@@ -32,22 +46,114 @@ public class GameLauncher extends Application {
     public void start(Stage primaryStage) {
         stage = primaryStage;
         root = new Group();
-        scene =new Scene(root, 760, 600, Color.BLACK);
+        scene = new Scene(root, 760, 600, Color.BLACK);
         stage.setResizable(false);
-        startBoard();
-    }
 
-    public void startBoard()
-    {
+        // Preloader stage
+        Stage preloader = new Stage();
+        VBox preRoot = new VBox();
+        preRoot.setAlignment(Pos.CENTER);
+        preRoot.setSpacing(20);
+        Scene preScene = new Scene(preRoot, 760, 600, Color.BLACK);
+        preloader.setScene(preScene);
+
+        // Image view
+        Image image = new Image("/MainIcon.png");
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(preScene.getHeight() / 3); // Set the height to be one third of the scene's height
+        imageView.setPreserveRatio(true); // Preserve the image's aspect ratio
+
+        // Production text
+        Text productionText = new Text("Brought to you by Sean, Mo and Emmanuel!");
+        productionText.setFont(new Font(30)); // Set the font size to 20
+        productionText.setFill(RED);
+
+        // Start text
+        Text startText = new Text("Start");
+        startText.setFont(new Font(50)); // Set the font size to 50
+        startText.setFill(WHITE);
+        startText.setOnMouseClicked(event -> {
+            round = 1;
+            preloader.close();
+            startBoard();
+            stage.setScene(scene);
+            stage.show();
+        });
+
+        // Rules text
+        Text rulesText = new Text("Rules");
+        rulesText.setFont(new Font(50)); // Set the font size to 50
+        rulesText.setFill(BLUE);
+        rulesText.setOnMouseClicked(event -> {
+            preloader.close();
+            rulesBoard();
+            stage.setScene(scene);
+            stage.show();
+        });
+
+        // Exit text
+        Text exitText = new Text("Exit");
+        exitText.setFont(new Font(50)); // Set the font size to 50
+        exitText.setFill(RED);
+        exitText.setOnMouseClicked(event -> System.exit(0));
+
+        // Add the image view and text to the preloader root
+        preRoot.getChildren().addAll(imageView, productionText, startText, rulesText, exitText);
+
+        // Show the preloader
+        preloader.show();
+    }
+    public void rulesBoard(){
         //loading the main icon from the resources directory
         Image icon = new Image(getClass().getResource("/MainIcon.png").toExternalForm());
         stage.getIcons().add(icon);
+
+        Stage preloader = new Stage();
+        VBox preRoot = new VBox();
+        preRoot.setAlignment(Pos.CENTER);
+        preRoot.setSpacing(20);
+        Scene preScene = new Scene(preRoot, 760, 600, Color.BLACK);
+        preloader.setScene(preScene);
+
+        Text startText = new Text("Start");
+        startText.setFont(new Font(50)); // Set the font size to 50
+        startText.setFill(WHITE);
+        startText.setOnMouseClicked(event -> {
+            preloader.close();
+            startBoard();
+            stage.setScene(scene);
+            stage.show();
+        });
+
+        preRoot.getChildren().addAll(startText);
+
+    }
+
+    public static void startBoard()
+    {
+        System.out.println("\n Player one has " + pOneScore + " points");
+        System.out.println("\n Player two has " + pTwoscore + " points");
+        AtomCount = 0;
+        if(round % 2 == 0){
+            System.out.println("Player twos turn to guess\nRound: " + round);
+        }else{
+            System.out.println("Player one's turn to guess\nRound: " + round);
+        }
+        //loading the main icon from the resources directory
+        //Image icon = new Image(getClass().getResource("/MainIcon.png").toExternalForm());
+        //stage.getIcons().add(icon);
         //side length and height of hexagon
         double side = 40;
         double height = side * Math.sqrt(3);
         // Maximum number of columns in the middle of the hexagonal grid
         int maxColumns = 9;
         // counter for adding Atoms
+
+        scene.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.H) {
+                Hexagon.hideAtoms();
+            }
+        });
 
         // Create the top half of the hexagonal grid
         for (int i = 0; i < maxColumns / 2 + 1; i++) {
