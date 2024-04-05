@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -87,8 +88,6 @@ public class GameLauncher extends Application {
         rulesText.setOnMouseClicked(event -> {
             preloader.close();
             rulesBoard();
-            stage.setScene(scene);
-            stage.show();
         });
 
         // Exit text
@@ -115,9 +114,23 @@ public class GameLauncher extends Application {
         Scene preScene = new Scene(preRoot, 760, 600, Color.BLACK);
         preloader.setScene(preScene);
 
+        // Add the rules text
+        Text rulesText = new Text("The rules of the game are as followed: " +
+                "The terminal tells you who's turn it is as setter and as experimenter, " +
+                "if you are setter you place 6 atoms and when you are done you press H to hide them. " +
+                "the experimenter then shoots rays by pressing the arrows and when satisfied have 6 guesses to guess " +
+                "where each atom is. Every wrong guess is 5 points and every ray shot is one point. " +
+                "After 6 guesses the terminal will say guesses are done and to press P " +
+                "where the game will reset and roles reversed, lowest score at the end wins!");
+        rulesText.setFill(Color.WHITE); // Set the text color to white
+        rulesText.setWrappingWidth(700); // Set the wrapping width to fit the scene
+        rulesText.setFont(new Font(20));
+        rulesText.setTextAlignment(TextAlignment.JUSTIFY); // Justify the text
+
+
         Text startText = new Text("Start");
         startText.setFont(new Font(50)); // Set the font size to 50
-        startText.setFill(WHITE);
+        startText.setFill(Color.WHITE);
         startText.setOnMouseClicked(event -> {
             preloader.close();
             startBoard();
@@ -125,19 +138,22 @@ public class GameLauncher extends Application {
             stage.show();
         });
 
-        preRoot.getChildren().addAll(startText);
-
+        // Add the rules text and start button to the root
+        preRoot.getChildren().addAll(rulesText, startText);
+        preloader.show();
     }
+
 
     public static void startBoard()
     {
-        System.out.println("\n Player one has " + pOneScore + " points");
-        System.out.println("\n Player two has " + pTwoscore + " points");
+        System.out.println("Round: " + round);
+        System.out.println("\nPlayer one has " + pOneScore + " points");
+        System.out.println("\nPlayer two has " + pTwoscore + " points");
         AtomCount = 0;
         if(round % 2 == 0){
-            System.out.println("Player twos turn to guess\nRound: " + round);
+            System.out.println("\nPlayer one's turn to set and player two's turn to experiment");
         }else{
-            System.out.println("Player one's turn to guess\nRound: " + round);
+            System.out.println("\nPlayer two's turn to set and player one's turn to experiment");
         }
         //loading the main icon from the resources directory
         //Image icon = new Image(getClass().getResource("/MainIcon.png").toExternalForm());
