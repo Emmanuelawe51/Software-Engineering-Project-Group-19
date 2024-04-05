@@ -83,7 +83,7 @@ public class Hexagon {
             if (i > 0) {
                 if (i < 5 && j - 1 >= 0 && GameLauncher.coordinatesOfCenters[i-1][j-1] != null)
                     GameLauncher.coordinatesOfCenters[i-1][j-1].setPointOfAreaOfInfluence(Arrow.Direction.NORTHWEST);
-                else if (j >= 0 && GameLauncher.coordinatesOfCenters[i-1][j] != null)
+                else if (j >= 0 && GameLauncher.coordinatesOfCenters[i-1][j] != null && !(j == 0 && i < 5))
                     GameLauncher.coordinatesOfCenters[i-1][j].setPointOfAreaOfInfluence(Arrow.Direction.NORTHWEST);
 
                 if (i > 4 && j + 1 < numCols && GameLauncher.coordinatesOfCenters[i-1][j+1] != null)
@@ -100,7 +100,7 @@ public class Hexagon {
 
                 if (i > 3 && j - 1 >= 0 && GameLauncher.coordinatesOfCenters[i+1][j-1] != null)
                     GameLauncher.coordinatesOfCenters[i+1][j-1].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHWEST);
-                else if (j >= 0 && GameLauncher.coordinatesOfCenters[i+1][j] != null)
+                else if (j >= 0 && GameLauncher.coordinatesOfCenters[i+1][j] != null && !(j == 0 && i > 3))
                     GameLauncher.coordinatesOfCenters[i+1][j].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHWEST);
                 rings.add(dottedCircle);
 
