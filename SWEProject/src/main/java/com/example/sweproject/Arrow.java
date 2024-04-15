@@ -1,14 +1,11 @@
 package com.example.sweproject;
 
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.example.sweproject.GameLauncher.*;
 import static javafx.scene.paint.Color.RED;
@@ -16,7 +13,7 @@ import static javafx.scene.paint.Color.WHITE;
 
 
 public class Arrow {
-
+    private boolean rayShot = false;
     private double x;
     private double y;
     //stores the place in the 2d array the arrow is
@@ -147,92 +144,108 @@ public class Arrow {
     }
     public void ShootRay() {
         arrow.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
-            int xCord = coord[0];
-            int yCord = coord[1];
-            //getting the coordinates of the center of the hexagons we need
-            double rayEndX = coordinatesOfCenters[xCord][yCord].getX();
-            double rayEndY = coordinatesOfCenters[xCord][yCord].getY();
-            double rayStartX = x;
-            double rayStartY = y;
+            if(!rayShot) {
+                int xCord = coord[0];
+                int yCord = coord[1];
+                //getting the coordinates of the center of the hexagons we need
+                double rayEndX = coordinatesOfCenters[xCord][yCord].getX();
+                double rayEndY = coordinatesOfCenters[xCord][yCord].getY();
+                double rayStartX = x;
+                double rayStartY = y;
 
-            boolean absorbed = false;
+                boolean absorbed = false;
 
-            while (isValidCoordinate(xCord, yCord) && !absorbed) {
+                while (isValidCoordinate(xCord, yCord) && !absorbed) {
 
-                if (isValidCoordinate(xCord, yCord) && coordinatesOfCenters[xCord][yCord].getDeflectionType() != 0) {
-                    Coordinate nextPoint = coordinatesOfCenters[xCord][yCord];
-                    Direction dOfAoi = nextPoint.getPointOfAreaOfInfluence1();
-                    int defType = nextPoint.getDeflectionType();
+                    if (isValidCoordinate(xCord, yCord) && coordinatesOfCenters[xCord][yCord].getDeflectionType() != 0) {
+                        Coordinate nextPoint = coordinatesOfCenters[xCord][yCord];
+                        Direction dOfAoi = nextPoint.getPointOfAreaOfInfluence1();
+                        int defType = nextPoint.getDeflectionType();
 
-                    System.out.println("detected");
-                    if (dOfAoi == this.arrowDirection.iterate(3) && defType == 1) {    //when there is an absorbtion
-                        absorbed = true;
-                        System.out.println("absorbed");
-                    } else if (defType == 1) {                           //when there is a single collision i.e. 60 degrees
-                        if(dOfAoi.iterate(2) == this.arrowDirection) {  //deflection logic
-                            this.arrowDirection = dOfAoi.iterate(1);
-                        } else{
-                            this.arrowDirection = dOfAoi.iterate(5);
+                        System.out.println("detected");
+                        if (dOfAoi == this.arrowDirection.iterate(3) && defType == 1 || defType == -1) {    //when there is an absorbtion
+                            absorbed = true;
+                            System.out.println("absorbed");
+                        } else if (defType == 1) {                           //when there is a single collision i.e. 60 degrees
+                            if (dOfAoi.iterate(2) == this.arrowDirection) {  //deflection logic
+                                this.arrowDirection = dOfAoi.iterate(1);
+                            } else {
+                                this.arrowDirection = dOfAoi.iterate(5);
+                            }
+                            System.out.println("deflected 60");
+                        } else if (defType == 2) {                          //when there is a 120 degree deflection
+                            if (this.arrowDirection == dOfAoi.iterate(3)) {
+                                this.arrowDirection = nextPoint.getPointOfAreaOfInfluence2();
+                                System.out.println(nextPoint.getPointOfAreaOfInfluence2());
+                            } else {
+                                this.arrowDirection = dOfAoi;
+                            }
+                            System.out.println("deflected 120");
+                        } else {                                                //when there is a 180 degrees i.e reflection
+                            this.arrowDirection = this.arrowDirection.iterate(3);
+                            System.out.println("reflected 180");
                         }
-                        System.out.println("deflected 60");
-                    } else if (defType == 2) {                          //when there is a 120 degree deflection
-                        if(this.arrowDirection == dOfAoi.iterate(3)){
-                            this.arrowDirection = nextPoint.getPointOfAreaOfInfluence2();
-                            System.out.println(nextPoint.getPointOfAreaOfInfluence2());
-                        } else {
-                            this.arrowDirection = dOfAoi;
-                        }
-                        System.out.println("deflected 120");
-                    } else {                                                //when there is a 180 degrees i.e reflection
-                        this.arrowDirection = this.arrowDirection.iterate(3);
-                        System.out.println("reflected 180");
+                    }
+
+                    // Create and add the ray
+                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                    rayArrayList.add(ray);
+                    root.getChildren().add(ray.getOutline());
+
+                    // Update ray starting position for the next iteration
+                    rayStartX = rayEndX;
+                    rayStartY = rayEndY;
+
+                    // Move to the next coordinate based on arrow direction
+                    switch (arrowDirection) {
+                        case EAST:
+                            yCord++;
+                            break;
+                        case WEST:
+                            yCord--;
+                            break;
+                        case NORTHWEST:
+                            xCord--;
+                            if (xCord < 4)
+                                yCord--;
+                            break;
+                        case NORTHEAST:
+                            xCord--;
+                            if (xCord > 3)
+                                yCord++;
+                            break;
+                        case SOUTHEAST:
+                            xCord++;
+                            if (xCord < 5)
+                                yCord++;
+                            break;
+                        case SOUTHWEST:
+                            xCord++;
+                            if (xCord > 4)
+                                yCord--;
+                            break;
+                    }
+                    // Update ray ending position if the next coordinate is valid
+                    if (isValidCoordinate(xCord, yCord)) {
+                        rayEndX = coordinatesOfCenters[xCord][yCord].getX();
+                        rayEndY = coordinatesOfCenters[xCord][yCord].getY();
                     }
                 }
 
-                // Create and add the ray
-                Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
-                root.getChildren().add(ray.getOutline());
 
-                // Update ray starting position for the next iteration
-                rayStartX = rayEndX;
-                rayStartY = rayEndY;
-
-                // Move to the next coordinate based on arrow direction
-                switch (arrowDirection) {
-                    case EAST:
-                        yCord++;
-                        break;
-                    case WEST:
-                        yCord--;
-                        break;
-                    case NORTHWEST:
-                        xCord--;
-                        if(xCord < 4)
-                            yCord--;
-                        break;
-                    case NORTHEAST:
-                        xCord--;
-                        if(xCord>3)
-                            yCord++;
-                        break;
-                    case SOUTHEAST:
-                        xCord++;
-                        if(xCord<5)
-                            yCord++;
-                        break;
-                    case SOUTHWEST:
-                        xCord++;
-                        if(xCord>4)
-                            yCord--;
-                        break;
+                //setting the last ray path
+                if (!absorbed) {
+                    rayEndX = rayStartX + getXchange(arrowDirection) / 2;
+                    rayEndY = rayStartY + getYchange(arrowDirection) / 2;
+                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                    ray.setVisible();
+                    root.getChildren().add(ray.getOutline());
                 }
-                // Update ray ending position if the next coordinate is valid
-                if (isValidCoordinate(xCord, yCord)) {
-                    rayEndX = coordinatesOfCenters[xCord][yCord].getX();
-                    rayEndY = coordinatesOfCenters[xCord][yCord].getY();
-                }
+                rayShot = true;
+                arrow.setFill(Color.TRANSPARENT);
             }
         });
+
     }
 
     //function to check validity
@@ -250,7 +263,31 @@ public class Arrow {
     //sets the colour of the arrow when the mouse is hovering above the arrow
     private void addMouseEnterHandler() {
         arrow.setOnMouseEntered(event -> {
-            arrow.setFill(Color.DARKRED);
-        });
+                if(!rayShot)
+                arrow.setFill(Color.DARKRED);
+            });
+    }
+
+    //two functions to get the change of coordinates for each direction
+    private double getYchange(Direction d){
+        return switch (d) {
+            case NORTHEAST -> coordinatesOfCenters[2][3].getY() - coordinatesOfCenters[3][3].getY();
+            case EAST -> coordinatesOfCenters[3][4].getY() - coordinatesOfCenters[3][3].getY();
+            case SOUTHEAST -> coordinatesOfCenters[4][4].getY() - coordinatesOfCenters[3][3].getY();
+            case SOUTHWEST -> coordinatesOfCenters[4][3].getY() - coordinatesOfCenters[3][3].getY();
+            case WEST -> coordinatesOfCenters[3][2].getY() - coordinatesOfCenters[3][3].getY();
+            case NORTHWEST -> coordinatesOfCenters[2][2].getY() - coordinatesOfCenters[3][3].getY();
+        };
+    }
+
+    private double getXchange(Direction d){
+        return switch (d) {
+            case NORTHEAST -> coordinatesOfCenters[2][3].getX() - coordinatesOfCenters[3][3].getX();
+            case EAST -> coordinatesOfCenters[3][4].getX() - coordinatesOfCenters[3][3].getX();
+            case SOUTHEAST -> coordinatesOfCenters[4][4].getX() - coordinatesOfCenters[3][3].getX();
+            case SOUTHWEST -> coordinatesOfCenters[4][3].getX() - coordinatesOfCenters[3][3].getX();
+            case WEST -> coordinatesOfCenters[3][2].getX() - coordinatesOfCenters[3][3].getX();
+            case NORTHWEST -> coordinatesOfCenters[2][2].getX() - coordinatesOfCenters[3][3].getX();
+        };
     }
 }

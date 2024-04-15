@@ -4,6 +4,9 @@ package com.example.sweproject;
 public class Coordinate {
     private double x;
     private double y;
+    //prevent the edge case atoms from changing from -1
+    private boolean finalDeftype = false;
+    //-1 is for absorption at edge cases
     //0 is for no deflection
     //1 is for 120 degree deflections
     //2 is for 60 degree deflections
@@ -23,7 +26,7 @@ public class Coordinate {
             deflectionType++;
             if(!(direction.iterate(1) == pointOfAreaOfInfluence1 || direction.iterate(5) == pointOfAreaOfInfluence1))
                 deflectionType = 3;
-        } else {
+        } else if (deflectionType != -1){
             deflectionType = 3;
         }
 
@@ -38,6 +41,13 @@ public class Coordinate {
     }
     public int getDeflectionType(){
         return deflectionType;
+    }
+
+    public void setDeflectionType(int deflectionType) {
+       if(!finalDeftype)
+           this.deflectionType = deflectionType;
+       if(deflectionType == -1)
+           finalDeftype = true;
     }
 
     public Coordinate(double x, double y) {

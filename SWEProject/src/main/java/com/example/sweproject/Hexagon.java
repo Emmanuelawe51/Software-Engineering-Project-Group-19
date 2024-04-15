@@ -74,6 +74,55 @@ public class Hexagon {
 
             // Set area of influence for adjacent hexagons
             // creates a circle of area of influence around the atom each with their own direction which is relative to the atom
+
+            //sets the deflection type of the edge cases to 180 to it is reflected
+            //if the atom is on the top half of the game hexagon
+            if((j == 0 || (j == 4 + i )) && i < 5 )  {
+
+                //set the current atom to absorb
+                GameLauncher.coordinatesOfCenters[i][j].setDeflectionType(-1);
+
+                if(j == 0 ){
+                    if(i-1 >= 0 && GameLauncher.coordinatesOfCenters[i-1][j] != null)
+                        GameLauncher.coordinatesOfCenters[i-1][j].setDeflectionType(3);
+
+                    if(GameLauncher.coordinatesOfCenters[i+1][j] != null)
+                        GameLauncher.coordinatesOfCenters[i+1][j].setDeflectionType(3);
+
+                } else {
+
+                    if(j + 1 <= 8 && GameLauncher.coordinatesOfCenters[i+1][j+1] != null)
+                        GameLauncher.coordinatesOfCenters[i+1][j+1].setDeflectionType(3);
+                    if(i-1 >= 0 && GameLauncher.coordinatesOfCenters[i-1][j-1] != null)
+                        GameLauncher.coordinatesOfCenters[i-1][j-1].setDeflectionType(3);
+                }
+
+
+            }
+            // if the atom is on the bottom half of the game hexagon
+            if((j == 0 ||j == 7 - (i - 5)) && i >= 5) {
+
+                //set the current atom to absorb
+                GameLauncher.coordinatesOfCenters[i][j].setDeflectionType(-1);
+                if(j == 0 ){
+                    if(GameLauncher.coordinatesOfCenters[i-1][j] != null)
+                        GameLauncher.coordinatesOfCenters[i-1][j].setDeflectionType(3);
+
+                    if(i+1 <= 8 && GameLauncher.coordinatesOfCenters[i+1][j] != null)
+                        GameLauncher.coordinatesOfCenters[i+1][j].setDeflectionType(3);
+
+                } else {
+
+                    if(GameLauncher.coordinatesOfCenters[i-1][j+1] != null)
+                        GameLauncher.coordinatesOfCenters[i-1][j+1].setDeflectionType(3);
+                    if(i+1 <= 8 && GameLauncher.coordinatesOfCenters[i+1][j-1] != null)
+                        GameLauncher.coordinatesOfCenters[i+1][j-1].setDeflectionType(3);
+                }
+            }
+
+            //regular area of influence setting
+            //sets the direction of area of influences to the direction relative to the atom being placed
+
             if (j + 1 < numCols && GameLauncher.coordinatesOfCenters[i][j+1] != null)
                 GameLauncher.coordinatesOfCenters[i][j+1].setPointOfAreaOfInfluence(Arrow.Direction.EAST);
 

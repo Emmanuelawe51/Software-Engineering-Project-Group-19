@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
+import static com.example.sweproject.Ray.showRays;
 import static javafx.scene.paint.Color.*;
 
 public class GameLauncher extends Application {
@@ -33,9 +34,8 @@ public class GameLauncher extends Application {
     //score of players one and two
     public static int pOneScore = 0;
     public static int pTwoscore = 0;
-
-
     public static Coordinate[][] coordinatesOfCenters = new Coordinate[9][9];
+    public static ArrayList<Ray> rayArrayList = new ArrayList<>();
 
     public static void main(String[] args) {
         pOneScore = 0;
@@ -168,6 +168,9 @@ public class GameLauncher extends Application {
         scene.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.H) {
                 Hexagon.hideAtoms();
+            }
+            if (keyEvent.getCode() == KeyCode.L){
+                showRays();
             }
         });
 
@@ -355,13 +358,13 @@ public class GameLauncher extends Application {
 
 
         }
-        //printing for testing
+        /*//printing for testing
         for (int i = 0; i < coordinatesOfCenters.length; i++) {
             for (int j = 0; j < coordinatesOfCenters[i].length; j++) {
                 // Print the coordinates of the current Coordinate object
                 System.out.println("Coordinates at (" + i + ", " + j + "): " + coordinatesOfCenters[i][j]);
             }
-        }
+        }*/
 
 
 
