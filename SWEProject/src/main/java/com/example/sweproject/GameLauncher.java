@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -36,6 +37,13 @@ public class GameLauncher extends Application {
     public static int pTwoscore = 0;
     public static Coordinate[][] coordinatesOfCenters = new Coordinate[9][9];
     public static ArrayList<Ray> rayArrayList = new ArrayList<>();
+    private static boolean isQKeyPressed = false;
+    private static boolean isWKeyPressed = false;
+    private static boolean isEKeyPressed = false;
+    private static boolean isRKeyPressed = false;
+    private static boolean isTKeyPressed = false;
+
+
 
     public static void main(String[] args) {
         pOneScore = 0;
@@ -115,13 +123,18 @@ public class GameLauncher extends Application {
         preloader.setScene(preScene);
 
         // Add the rules text
-        Text rulesText = new Text("The rules of the game are as followed: " +
-                "The terminal tells you who's turn it is as setter and as experimenter, " +
-                "if you are setter you place 6 atoms and when you are done you press H to hide them. " +
-                "the experimenter then shoots rays by pressing the arrows and when satisfied have 6 guesses to guess " +
-                "where each atom is. Every wrong guess is 5 points and every ray shot is one point. " +
-                "After 6 guesses the terminal will say guesses are done and to press P " +
-                "where the game will reset and roles reversed, lowest score at the end wins!");
+        Text rulesText = new Text(
+                "The rules of the game are as follows:\n" +
+                        "- The terminal tells you who's turn it is as setter and as experimenter.\n" +
+                        "- If you are the setter, you place 6 atoms and when you are done you press H to hide them.\n" +
+                        "- The experimenter tries to deduce the positions of the atoms by sending rays into the BLACK BOX, they 6 guesses to guess where each atom is.\n" +
+                        "- During play, the experimenter tells the setter where they are sending a ray into the box by announcing and pressing the numbered position at the edge of the BLACK BOX. \n" +
+                        "- Every wrong guess is 5 points and every ray shot is one point.\n" +
+                        "- The objective of the experimenter is to deduce the atom positions by using the smallest number of ray markers and correct atom guesses\n" +
+                        "- By reference to the setter's pad, the ray paths should be checked, and for every error made in reporting the result of a ray the experimenter's score is reduced by 5 points. \n" +
+                        "- After 6 guesses, the terminal will say guesses are done and to press P where the game will reset and roles reversed, Lowest score at the end wins!"
+
+        );
         rulesText.setFill(Color.WHITE); // Set the text color to white
         rulesText.setWrappingWidth(700); // Set the wrapping width to fit the scene
         rulesText.setFont(new Font(20));
@@ -165,12 +178,77 @@ public class GameLauncher extends Application {
         int maxColumns = 9;
         // counter for adding Atoms
 
+    // this is for the markers for the experimenter to use
+        scene.setOnMouseClicked(mouseEvent -> {
+            // Check if 'q' key is pressed
+            if (isQKeyPressed) {
+                // Get the x and y coordinates of the mouse click
+                double x = mouseEvent.getX();
+                double y = mouseEvent.getY();
+
+                // Create a blue rectangle at the mouse click position
+                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                rectangle.setFill(Color.BLUE);
+
+                // Add the rectangle to the root group
+                root.getChildren().add(rectangle);
+            } else if (isWKeyPressed) {
+                double x = mouseEvent.getX();
+                double y = mouseEvent.getY();
+                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                rectangle.setFill(MAGENTA);
+                root.getChildren().add(rectangle);
+            } else if (isEKeyPressed) {
+                double x = mouseEvent.getX();
+                double y = mouseEvent.getY();
+                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                rectangle.setFill(PURPLE);
+                root.getChildren().add(rectangle);
+            } else if (isRKeyPressed) {
+                double x = mouseEvent.getX();
+                double y = mouseEvent.getY();
+                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                rectangle.setFill(GREEN);
+                root.getChildren().add(rectangle);
+            } else if (isTKeyPressed) {
+                double x = mouseEvent.getX();
+                double y = mouseEvent.getY();
+                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                rectangle.setFill(RED);
+                root.getChildren().add(rectangle);
+            }
+        });
+
         scene.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.H) {
                 Hexagon.hideAtoms();
             }
-            if (keyEvent.getCode() == KeyCode.L){
+            if (keyEvent.getCode() == KeyCode.L) {
                 showRays();
+            }
+           /* if (keyEvent.getCode() == KeyCode.R) {
+                resetGame();
+            } */
+            // for the experimenter to mark what he thinks to be 60 degree deflections
+            if (keyEvent.getCode() == KeyCode.Q) {
+                isQKeyPressed = !isQKeyPressed;
+                // if the key is pressed again it cancels out
+            }
+            // for the experimenter to mark what he thinks to be 120 degree deflections
+            if (keyEvent.getCode() == KeyCode.W) {
+                isWKeyPressed = !isWKeyPressed;
+            }
+            // for the experimenter to mark what he thinks to be 180 degree deflections
+            if (keyEvent.getCode() == KeyCode.E) {
+                isEKeyPressed = !isEKeyPressed;
+            }
+            // for the experimenter to mark what he thinks to be an absorption
+            if (keyEvent.getCode() == KeyCode.R) {
+                isRKeyPressed = !isRKeyPressed;
+            }
+            // for the experimenter to mark what he thinks to be no hit
+            if (keyEvent.getCode() == KeyCode.T) {
+                isTKeyPressed = !isTKeyPressed;
             }
         });
 
@@ -380,7 +458,11 @@ public class GameLauncher extends Application {
         stage.show();
 
     }
-
-
+    /*
+    public static void resetGame() {
+        root.getChildren().clear();
+        round++;
+        startBoard();
+    }
+*/
 }
-
