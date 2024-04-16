@@ -45,118 +45,118 @@ public class Hexagon {
     private void addMouseClickHandler() {
 
         hexagon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-        if (GameLauncher.AtomCount < 6) {
-            Circle atomCircle = new Circle(xCord, yCord - side, side / 2);
-            RadialGradient gradient = new RadialGradient(
-                    0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE,
-                    new javafx.scene.paint.Stop(0, Color.RED),
-                    new javafx.scene.paint.Stop(1, Color.DARKRED)
-            );
-            hexagonToCircles.computeIfAbsent(hexagon, k -> new ArrayList<>()).add(atomCircle);
+            if (GameLauncher.AtomCount < 6) {
+                Circle atomCircle = new Circle(xCord, yCord - side, side / 2);
+                RadialGradient gradient = new RadialGradient(
+                        0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE,
+                        new javafx.scene.paint.Stop(0, Color.RED),
+                        new javafx.scene.paint.Stop(1, Color.DARKRED)
+                );
+                hexagonToCircles.computeIfAbsent(hexagon, k -> new ArrayList<>()).add(atomCircle);
 
 
-            atomCircle.setFill(gradient);
-            GameLauncher.root.getChildren().add(atomCircle);
-            GameLauncher.AtomCount++;
-            atoms.add(atomCircle);
+                atomCircle.setFill(gradient);
+                GameLauncher.root.getChildren().add(atomCircle);
+                GameLauncher.AtomCount++;
+                atoms.add(atomCircle);
 
-            double dottedCircleRadius = side * 1.73;
-            Circle dottedCircle = new Circle(xCord, yCord - side, dottedCircleRadius);
-            dottedCircle.setStroke(Color.WHITE);
-            dottedCircle.setStrokeWidth(1);
-            dottedCircle.getStrokeDashArray().addAll(2d, 5d);
-            dottedCircle.setFill(Color.TRANSPARENT);
-            GameLauncher.root.getChildren().add(dottedCircle);
+                double dottedCircleRadius = side * 1.73;
+                Circle dottedCircle = new Circle(xCord, yCord - side, dottedCircleRadius);
+                dottedCircle.setStroke(Color.WHITE);
+                dottedCircle.setStrokeWidth(1);
+                dottedCircle.getStrokeDashArray().addAll(2d, 5d);
+                dottedCircle.setFill(Color.TRANSPARENT);
+                GameLauncher.root.getChildren().add(dottedCircle);
 
 
-            int numRows = GameLauncher.coordinatesOfCenters.length;
-            int numCols = GameLauncher.coordinatesOfCenters[0].length;
+                int numRows = GameLauncher.coordinatesOfCenters.length;
+                int numCols = GameLauncher.coordinatesOfCenters[0].length;
 
-            // Set area of influence for adjacent hexagons
-            // creates a circle of area of influence around the atom each with their own direction which is relative to the atom
+                // Set area of influence for adjacent hexagons
+                // creates a circle of area of influence around the atom each with their own direction which is relative to the atom
 
-            //sets the deflection type of the edge cases to 180 to it is reflected
-            //if the atom is on the top half of the game hexagon
-            if((j == 0 || (j == 4 + i )) && i < 5 )  {
+                //sets the deflection type of the edge cases to 180 to it is reflected
+                //if the atom is on the top half of the game hexagon
+                if ((j == 0 || (j == 4 + i)) && i < 5) {
 
-                //set the current atom to absorb
-                GameLauncher.coordinatesOfCenters[i][j].setDeflectionType(-1);
+                    //set the current atom to absorb
+                    GameLauncher.coordinatesOfCenters[i][j].setDeflectionType(-1);
 
-                if(j == 0 ){
-                    if(i-1 >= 0 && GameLauncher.coordinatesOfCenters[i-1][j] != null)
-                        GameLauncher.coordinatesOfCenters[i-1][j].setDeflectionType(3);
+                    if (j == 0) {
+                        if (i - 1 >= 0 && GameLauncher.coordinatesOfCenters[i - 1][j] != null)
+                            GameLauncher.coordinatesOfCenters[i - 1][j].setDeflectionType(3);
 
-                    if(GameLauncher.coordinatesOfCenters[i+1][j] != null)
-                        GameLauncher.coordinatesOfCenters[i+1][j].setDeflectionType(3);
+                        if (GameLauncher.coordinatesOfCenters[i + 1][j] != null)
+                            GameLauncher.coordinatesOfCenters[i + 1][j].setDeflectionType(3);
 
-                } else {
+                    } else {
 
-                    if(j + 1 <= 8 && GameLauncher.coordinatesOfCenters[i+1][j+1] != null)
-                        GameLauncher.coordinatesOfCenters[i+1][j+1].setDeflectionType(3);
-                    if(i-1 >= 0 && GameLauncher.coordinatesOfCenters[i-1][j-1] != null)
-                        GameLauncher.coordinatesOfCenters[i-1][j-1].setDeflectionType(3);
+                        if (j + 1 <= 8 && GameLauncher.coordinatesOfCenters[i + 1][j + 1] != null)
+                            GameLauncher.coordinatesOfCenters[i + 1][j + 1].setDeflectionType(3);
+                        if (i - 1 >= 0 && GameLauncher.coordinatesOfCenters[i - 1][j - 1] != null)
+                            GameLauncher.coordinatesOfCenters[i - 1][j - 1].setDeflectionType(3);
+                    }
+
+
+                }
+                // if the atom is on the bottom half of the game hexagon
+                if ((j == 0 || j == 7 - (i - 5)) && i >= 5) {
+
+                    //set the current atom to absorb
+                    GameLauncher.coordinatesOfCenters[i][j].setDeflectionType(-1);
+                    if (j == 0) {
+                        if (GameLauncher.coordinatesOfCenters[i - 1][j] != null)
+                            GameLauncher.coordinatesOfCenters[i - 1][j].setDeflectionType(3);
+
+                        if (i + 1 <= 8 && GameLauncher.coordinatesOfCenters[i + 1][j] != null)
+                            GameLauncher.coordinatesOfCenters[i + 1][j].setDeflectionType(3);
+
+                    } else {
+
+                        if (GameLauncher.coordinatesOfCenters[i - 1][j + 1] != null)
+                            GameLauncher.coordinatesOfCenters[i - 1][j + 1].setDeflectionType(3);
+                        if (i + 1 <= 8 && GameLauncher.coordinatesOfCenters[i + 1][j - 1] != null)
+                            GameLauncher.coordinatesOfCenters[i + 1][j - 1].setDeflectionType(3);
+                    }
                 }
 
+                //regular area of influence setting
+                //sets the direction of area of influences to the direction relative to the atom being placed
 
-            }
-            // if the atom is on the bottom half of the game hexagon
-            if((j == 0 ||j == 7 - (i - 5)) && i >= 5) {
+                if (j + 1 < numCols && GameLauncher.coordinatesOfCenters[i][j + 1] != null)
+                    GameLauncher.coordinatesOfCenters[i][j + 1].setPointOfAreaOfInfluence(Arrow.Direction.EAST);
 
-                //set the current atom to absorb
-                GameLauncher.coordinatesOfCenters[i][j].setDeflectionType(-1);
-                if(j == 0 ){
-                    if(GameLauncher.coordinatesOfCenters[i-1][j] != null)
-                        GameLauncher.coordinatesOfCenters[i-1][j].setDeflectionType(3);
+                if (j - 1 >= 0 && GameLauncher.coordinatesOfCenters[i][j - 1] != null)
+                    GameLauncher.coordinatesOfCenters[i][j - 1].setPointOfAreaOfInfluence(Arrow.Direction.WEST);
 
-                    if(i+1 <= 8 && GameLauncher.coordinatesOfCenters[i+1][j] != null)
-                        GameLauncher.coordinatesOfCenters[i+1][j].setDeflectionType(3);
+                if (i > 0) {
+                    if (i < 5 && j - 1 >= 0 && GameLauncher.coordinatesOfCenters[i - 1][j - 1] != null)
+                        GameLauncher.coordinatesOfCenters[i - 1][j - 1].setPointOfAreaOfInfluence(Arrow.Direction.NORTHWEST);
+                    else if (j >= 0 && GameLauncher.coordinatesOfCenters[i - 1][j] != null && !(j == 0 && i < 5))
+                        GameLauncher.coordinatesOfCenters[i - 1][j].setPointOfAreaOfInfluence(Arrow.Direction.NORTHWEST);
 
-                } else {
-
-                    if(GameLauncher.coordinatesOfCenters[i-1][j+1] != null)
-                        GameLauncher.coordinatesOfCenters[i-1][j+1].setDeflectionType(3);
-                    if(i+1 <= 8 && GameLauncher.coordinatesOfCenters[i+1][j-1] != null)
-                        GameLauncher.coordinatesOfCenters[i+1][j-1].setDeflectionType(3);
+                    if (i > 4 && j + 1 < numCols && GameLauncher.coordinatesOfCenters[i - 1][j + 1] != null)
+                        GameLauncher.coordinatesOfCenters[i - 1][j + 1].setPointOfAreaOfInfluence(Arrow.Direction.NORTHEAST);
+                    else if (j < numCols && GameLauncher.coordinatesOfCenters[i - 1][j] != null)
+                        GameLauncher.coordinatesOfCenters[i - 1][j].setPointOfAreaOfInfluence(Arrow.Direction.NORTHEAST);
                 }
-            }
 
-            //regular area of influence setting
-            //sets the direction of area of influences to the direction relative to the atom being placed
+                if (i < numRows - 1) {
+                    if (i < 4 && j + 1 < numCols && GameLauncher.coordinatesOfCenters[i + 1][j + 1] != null)
+                        GameLauncher.coordinatesOfCenters[i + 1][j + 1].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHEAST);
+                    else if (j < numCols && GameLauncher.coordinatesOfCenters[i + 1][j] != null)
+                        GameLauncher.coordinatesOfCenters[i + 1][j].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHEAST);
 
-            if (j + 1 < numCols && GameLauncher.coordinatesOfCenters[i][j+1] != null)
-                GameLauncher.coordinatesOfCenters[i][j+1].setPointOfAreaOfInfluence(Arrow.Direction.EAST);
+                    if (i > 3 && j - 1 >= 0 && GameLauncher.coordinatesOfCenters[i + 1][j - 1] != null)
+                        GameLauncher.coordinatesOfCenters[i + 1][j - 1].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHWEST);
+                    else if (j >= 0 && GameLauncher.coordinatesOfCenters[i + 1][j] != null && !(j == 0 && i > 3))
+                        GameLauncher.coordinatesOfCenters[i + 1][j].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHWEST);
+                    rings.add(dottedCircle);
 
-            if (j - 1 >= 0 && GameLauncher.coordinatesOfCenters[i][j-1] != null)
-                GameLauncher.coordinatesOfCenters[i][j-1].setPointOfAreaOfInfluence(Arrow.Direction.WEST);
-
-            if (i > 0) {
-                if (i < 5 && j - 1 >= 0 && GameLauncher.coordinatesOfCenters[i-1][j-1] != null)
-                    GameLauncher.coordinatesOfCenters[i-1][j-1].setPointOfAreaOfInfluence(Arrow.Direction.NORTHWEST);
-                else if (j >= 0 && GameLauncher.coordinatesOfCenters[i-1][j] != null && !(j == 0 && i < 5))
-                    GameLauncher.coordinatesOfCenters[i-1][j].setPointOfAreaOfInfluence(Arrow.Direction.NORTHWEST);
-
-                if (i > 4 && j + 1 < numCols && GameLauncher.coordinatesOfCenters[i-1][j+1] != null)
-                    GameLauncher.coordinatesOfCenters[i-1][j+1].setPointOfAreaOfInfluence(Arrow.Direction.NORTHEAST);
-                else if (j < numCols && GameLauncher.coordinatesOfCenters[i-1][j] != null)
-                    GameLauncher.coordinatesOfCenters[i-1][j].setPointOfAreaOfInfluence(Arrow.Direction.NORTHEAST);
-            }
-
-            if (i < numRows - 1) {
-                if (i < 4 && j + 1 < numCols && GameLauncher.coordinatesOfCenters[i+1][j+1] != null)
-                    GameLauncher.coordinatesOfCenters[i+1][j+1].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHEAST);
-                else if (j < numCols && GameLauncher.coordinatesOfCenters[i+1][j] != null)
-                    GameLauncher.coordinatesOfCenters[i+1][j].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHEAST);
-
-                if (i > 3 && j - 1 >= 0 && GameLauncher.coordinatesOfCenters[i+1][j-1] != null)
-                    GameLauncher.coordinatesOfCenters[i+1][j-1].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHWEST);
-                else if (j >= 0 && GameLauncher.coordinatesOfCenters[i+1][j] != null && !(j == 0 && i > 3))
-                    GameLauncher.coordinatesOfCenters[i+1][j].setPointOfAreaOfInfluence(Arrow.Direction.SOUTHWEST);
-                rings.add(dottedCircle);
+                }
+                hexagonToCircles.computeIfAbsent(hexagon, k -> new ArrayList<>()).add(atomCircle);
 
             }
-            hexagonToCircles.computeIfAbsent(hexagon, k -> new ArrayList<>()).add(atomCircle);
-
-        }
 
             if (GameLauncher.AtomCount >= 6 && !isVisible && guesses < 6) {
                 // Check if the hexagon has an atom
@@ -166,16 +166,16 @@ public class Hexagon {
                 } else {
                     System.out.println("No atom");
                     guesses++;
-                    if (GameLauncher.round%2 == 0){
+                    if (GameLauncher.round % 2 == 0) {
                         pTwoscore = pTwoscore + 5;
-                    }else{
+                    } else {
                         pOneScore = pOneScore + 5;
                     }
                 }
 
             }
 
-            if(guesses == 6){
+            if (guesses == 6) {
                 System.out.println("All Guesses Complete press P to start next round");
                 scene.setOnKeyPressed(keyEvent -> {
                     if (keyEvent.getCode() == KeyCode.P) {
@@ -187,6 +187,7 @@ public class Hexagon {
                         }
                         atoms.clear();
                         rings.clear();
+                        Ray.clearRays();
                         GameLauncher.round++;
                         guesses = 0;
                         GameLauncher.startBoard();
@@ -194,7 +195,7 @@ public class Hexagon {
                 });
             }
 
-        printNoOfAreaOfInfluence(GameLauncher.coordinatesOfCenters);
+            printNoOfAreaOfInfluence(GameLauncher.coordinatesOfCenters);
     });
     }
     public static void hideAtoms() {

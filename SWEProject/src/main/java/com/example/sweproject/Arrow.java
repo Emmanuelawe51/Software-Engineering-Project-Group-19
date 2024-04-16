@@ -1,11 +1,14 @@
 package com.example.sweproject;
 
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.sweproject.GameLauncher.*;
 import static javafx.scene.paint.Color.RED;
@@ -33,6 +36,7 @@ public class Arrow {
             return values()[(ordinal() + i) % 6];
         }
     }
+
     private Direction arrowDirection;
 
     private int arrowNum;
@@ -144,6 +148,14 @@ public class Arrow {
     }
     public void ShootRay() {
         arrow.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
+            if(GameLauncher.round % 2 != 0){
+                pOneScore = pOneScore + 1;
+            }else{
+                pTwoscore = pTwoscore + 1;
+            }
+        });
+
+        arrow.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
             if(!rayShot) {
                 int xCord = coord[0];
                 int yCord = coord[1];
@@ -245,8 +257,8 @@ public class Arrow {
                 arrow.setFill(Color.TRANSPARENT);
             }
         });
-
     }
+
 
     //function to check validity
     private boolean isValidCoordinate(int x, int y) {

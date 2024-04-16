@@ -4,13 +4,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
+import java.util.Iterator;
+
 import static com.example.sweproject.GameLauncher.rayArrayList;
 
 public class Ray {
     private final double setStartX;
     private final double setStartY;
     private Arrow.Direction rayDirection;
-    private boolean isVisible = false;
+    private boolean isVisible = true;
     Line line;
     Line outline;
     public Ray(double startX, double startY, double setEndX, double setEndY, Arrow.Direction direction)
@@ -52,6 +54,17 @@ public class Ray {
             c.setVisible();
         }
 
+    }
+
+    public static void clearRays(){
+        Iterator<Ray> iterator = rayArrayList.iterator();
+        while (iterator.hasNext()) {
+            Ray ray = iterator.next();
+            // Remove the ray from the root children
+            GameLauncher.root.getChildren().remove(ray.getOutline());
+            // Remove the ray from the list
+            iterator.remove();
+        }
     }
     public Line getOutline() {return outline;}
     public Line getLine() {

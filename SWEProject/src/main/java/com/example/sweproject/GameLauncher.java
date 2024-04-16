@@ -30,7 +30,7 @@ public class GameLauncher extends Application {
     //stores the coordinates of the center of the hexagons
 
     //round number
-    public static int round;
+    public static int round = 1;
 
     //score of players one and two
     public static int pOneScore = 0;
