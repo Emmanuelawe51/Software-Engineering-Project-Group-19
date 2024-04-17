@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -42,6 +43,10 @@ public class GameLauncher extends Application {
     private static boolean isEKeyPressed = false;
     private static boolean isRKeyPressed = false;
     private static boolean isTKeyPressed = false;
+    public static  boolean guessersTurn = false;
+    public static Text playerTurn;
+    public static final Text  confirmationText = new Text("Click again to confirm atom positions");
+    public static ArrayList<Hexagon> guessedHexagons = new ArrayList<>();
 
 
 
@@ -159,9 +164,7 @@ public class GameLauncher extends Application {
 
     public static void startBoard()
     {
-        System.out.println("Round: " + round);
-        System.out.println("\nPlayer one has " + pOneScore + " points");
-        System.out.println("\nPlayer two has " + pTwoscore + " points");
+        displayText();
         AtomCount = 0;
         if(round % 2 == 0){
             System.out.println("\nPlayer one's turn to set and player two's turn to experiment");
@@ -220,12 +223,6 @@ public class GameLauncher extends Application {
         });
 
         scene.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.H) {
-                Hexagon.hideAtoms();
-            }
-            if (keyEvent.getCode() == KeyCode.L) {
-                showRays();
-            }
            /* if (keyEvent.getCode() == KeyCode.R) {
                 resetGame();
             } */
@@ -456,6 +453,37 @@ public class GameLauncher extends Application {
         //how stage is shown
         stage.setScene(scene);
         stage.show();
+
+    }
+
+    private static void displayText(){
+        if(round == 1){
+            playerTurn = new Text("Player 1's turn");
+            playerTurn.setX(600);
+            playerTurn.setY(20);
+            playerTurn.setFill(Color.RED);
+            playerTurn.setStroke(Color.RED);
+            playerTurn.setStrokeWidth(0.2);
+            playerTurn.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+            root.getChildren().add(playerTurn);
+
+
+            confirmationText.setX(20);
+            confirmationText.setY(20);
+            confirmationText.setFill(Color.WHITE);
+            confirmationText.setStroke(Color.RED);
+            confirmationText.setStrokeWidth(0.2);
+            confirmationText.setVisible(false);
+            root.getChildren().add(confirmationText);
+        } else {
+            playerTurn.setText("Player 1's turn");
+            playerTurn.setFill(Color.RED);
+            playerTurn.setStroke(Color.RED);
+            confirmationText.setVisible(false);
+            System.out.println("Round: " + round);
+            System.out.println("\nPlayer one has " + pOneScore + " points");
+            System.out.println("\nPlayer two has " + pTwoscore + " points");
+        }
 
     }
     /*

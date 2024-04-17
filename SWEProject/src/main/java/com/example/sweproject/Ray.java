@@ -12,7 +12,7 @@ public class Ray {
     private final double setStartX;
     private final double setStartY;
     private Arrow.Direction rayDirection;
-    private boolean isVisible = true;
+    private boolean isVisible = false;
     Line line;
     Line outline;
     public Ray(double startX, double startY, double setEndX, double setEndY, Arrow.Direction direction)
@@ -44,16 +44,19 @@ public class Ray {
        System.out.println("Ray created from (" + startX + ", " + startY + ") to (" + setEndX + ", " + setEndY + ")"); // Add this line
 
     }
-    public void setVisible(){
-        isVisible = !isVisible;
-        line.setVisible(isVisible);
-        outline.setVisible(isVisible);
+    public void setVisible(boolean bool){
+        line.setVisible(bool);
+        outline.setVisible(bool);
+    }
+    public static void hideRays(){
+        for (Ray c : rayArrayList) {
+            c.setVisible(false);
+        }
     }
     public static void showRays(){
         for (Ray c : rayArrayList) {
-            c.setVisible();
+            c.setVisible(true);
         }
-
     }
 
     public static void clearRays(){

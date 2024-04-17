@@ -250,7 +250,7 @@ public class Arrow {
                     rayEndX = rayStartX + getXchange(arrowDirection) / 2;
                     rayEndY = rayStartY + getYchange(arrowDirection) / 2;
                     Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
-                    ray.setVisible();
+                    ray.setVisible(true);
                     root.getChildren().add(ray.getOutline());
                 }
                 rayShot = true;
