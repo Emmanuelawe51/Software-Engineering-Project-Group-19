@@ -79,10 +79,26 @@ public class Hexagon {
     private void handleGuessTurn(){
         confirmationText.setVisible(false);
         toggleAtoms(false);
-        playerTurn.setText("Player 2's Turn");
+        if(round % 2 == 0) {
+            playerTurn.setText("Player 1's Turn");
+        }else{
+            playerTurn.setText("Player 2's Turn");
+        }
         playerTurn.setFill(Color.BLUE);
         playerTurn.setStroke(Color.BLUE);
 
+        if (!hexagonToCircles.getOrDefault(hexagon, Collections.emptyList()).isEmpty()) {
+            System.out.println("Atom found");
+            guesses++;
+        } else {
+            System.out.println("No atom");
+            guesses++;
+            if (GameLauncher.round % 2 != 0) {
+                pTwoscore = pTwoscore + 5;
+            } else {
+                pOneScore = pOneScore + 5;
+            }
+        }
 
         if(!guessersTurn){
             toggleGuessersTurn();
@@ -102,19 +118,6 @@ public class Hexagon {
 
             this.toggleIsClicked();
             guessedHexagons.add(this);
-
-            if (!hexagonToCircles.getOrDefault(hexagon, Collections.emptyList()).isEmpty()) {
-                System.out.println("Atom found");
-                guesses++;
-            } else {
-                System.out.println("No atom");
-                guesses++;
-                if (GameLauncher.round % 2 == 0) {
-                    pTwoscore = pTwoscore + 5;
-                } else {
-                    pOneScore = pOneScore + 5;
-                }
-            }
         }
 
     }
@@ -124,20 +127,28 @@ public class Hexagon {
         hexagon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 
             if (GameLauncher.AtomCount < 6) {
-                System.out.println("here 1");
+                //System.out.println("here 1");
                 handleAtomSetting();
                 if (GameLauncher.AtomCount == 6 && !guessersTurn) {
                     confirmationText.setVisible(true);
                 }
 
-            }  else if (guesses != 6) {
-                System.out.println("setter mate432242 " + guessersTurn);
-                System.out.println("here 3");
+            }  else if (guesses != 7) {
+                //System.out.println("setter mate432242 " + guessersTurn);
+                //System.out.println("here 3");
                 handleGuessTurn();
             }
 
-            if (guesses == 6) {
+            if (guesses == 7) {
                 System.out.println("All Guesses Complete press P to start next round");
+                Ray.showRays();
+                for (Circle atom : atoms){
+                    atom.setVisible(isVisible);
+                }
+                for (Circle ring : rings){
+                    ring.setVisible(isVisible);
+                }
+
                 scene.setOnKeyPressed(keyEvent -> {
                     if (keyEvent.getCode() == KeyCode.P) {
                         for (Circle atom : atoms) {
@@ -308,28 +319,6 @@ public class Hexagon {
     private void toggleIsClicked(){
         isClicked = !isClicked;
     }
-
-   /* public void addAtom(Group root)
-    {
-        //creating the atom
-        Circle atom = new Circle(xCord, yCord - side, side / 2);
-        RadialGradient gradient = new RadialGradient(
-                0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE,
-                new javafx.scene.paint.Stop(0, Color.RED),
-                new javafx.scene.paint.Stop(1, Color.DARKRED)
-        );
-        atom.setFill(gradient);
-        root.getChildren().add(atom);
-
-        //creating area of influence
-        double dottedCircleRadius = side * 1.75;
-        Circle dottedCircle = new Circle(xCord, yCord - side, dottedCircleRadius);
-        dottedCircle.setStroke(Color.WHITE);
-        dottedCircle.setStrokeWidth(1);
-        dottedCircle.getStrokeDashArray().addAll(2d, 5d);
-        dottedCircle.setFill(Color.TRANSPARENT);
-        root.getChildren().add(dottedCircle);
-    }*/
 
     private Polygon createHexagon() {
         Polygon hexagon = new Polygon();

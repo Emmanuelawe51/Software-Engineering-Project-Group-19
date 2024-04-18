@@ -162,14 +162,15 @@ public class GameLauncher extends Application {
     }
 
 
+
     public static void startBoard()
     {
         displayText();
         AtomCount = 0;
         if(round % 2 == 0){
-            System.out.println("\nPlayer one's turn to set and player two's turn to experiment");
+            System.out.println("\nPlayer two's turn to set and player ones's turn to experiment");
         }else{
-            System.out.println("\nPlayer two's turn to set and player one's turn to experiment");
+            System.out.println("\nPlayer one's turn to set and player two's turn to experiment");
         }
         //loading the main icon from the resources directory
         //Image icon = new Image(getClass().getResource("/MainIcon.png").toExternalForm());
@@ -457,7 +458,7 @@ public class GameLauncher extends Application {
     }
 
     private static void displayText(){
-        if(round == 1){
+        if(round % 2 != 0){
             playerTurn = new Text("Player 1's turn");
             playerTurn.setX(600);
             playerTurn.setY(20);
@@ -475,8 +476,9 @@ public class GameLauncher extends Application {
             confirmationText.setStrokeWidth(0.2);
             confirmationText.setVisible(false);
             root.getChildren().add(confirmationText);
-        } else {
-            playerTurn.setText("Player 1's turn");
+        }
+        else {
+            playerTurn.setText("Player 2's turn");
             playerTurn.setFill(Color.RED);
             playerTurn.setStroke(Color.RED);
             confirmationText.setVisible(false);

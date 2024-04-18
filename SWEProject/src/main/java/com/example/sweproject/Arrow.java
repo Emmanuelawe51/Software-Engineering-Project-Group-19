@@ -148,7 +148,7 @@ public class Arrow {
     }
     public void ShootRay() {
         arrow.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
-            if(GameLauncher.round % 2 != 0){
+            if(GameLauncher.round % 2 == 0){
                 pOneScore = pOneScore + 1;
             }else{
                 pTwoscore = pTwoscore + 1;
@@ -250,14 +250,17 @@ public class Arrow {
                     rayEndX = rayStartX + getXchange(arrowDirection) / 2;
                     rayEndY = rayStartY + getYchange(arrowDirection) / 2;
                     Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+                    rayArrayList.add(ray);
                     ray.setVisible(true);
                     root.getChildren().add(ray.getOutline());
                 }
+
                 rayShot = true;
                 arrow.setFill(Color.TRANSPARENT);
             }
         });
     }
+
 
 
     //function to check validity
