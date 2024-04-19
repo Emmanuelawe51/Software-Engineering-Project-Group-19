@@ -1,8 +1,8 @@
 package com.example.sweproject;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import java.util.Scanner;
 
 import java.util.Iterator;
 
@@ -57,6 +57,12 @@ public class Ray {
         for (Ray c : rayArrayList) {
             c.setVisible(true);
         }
+    }
+    public static void promptForExitPoint() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the exit point coordinates");
+        int ExitPoint = scanner.nextInt();
+        System.out.println("Exit point : (" + ExitPoint + ")");
     }
 
     public static void clearRays(){

@@ -124,7 +124,7 @@ public class Arrow {
                 text.setX(x - 4);
                 text.setY(y + 11);
             }
-        } else if (arrowNum <= 55) {
+        } else if (arrowNum < 55) {
 
             if (arrowNum % 2 == 0) {
                 text.setX(x - 18);
@@ -256,6 +256,7 @@ public class Arrow {
                 }
 
                 rayShot = true;
+                Ray.promptForExitPoint();
                 arrow.setFill(Color.TRANSPARENT);
             }
         });

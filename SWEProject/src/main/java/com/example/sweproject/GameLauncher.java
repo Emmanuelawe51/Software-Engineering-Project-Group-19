@@ -36,6 +36,8 @@ public class GameLauncher extends Application {
     //score of players one and two
     public static int pOneScore = 0;
     public static int pTwoscore = 0;
+    private static Text playerOneScoreText;
+    private static Text playerTwoScoreText;
     public static Coordinate[][] coordinatesOfCenters = new Coordinate[9][9];
     public static ArrayList<Ray> rayArrayList = new ArrayList<>();
     private static boolean isQKeyPressed = false;
@@ -191,7 +193,7 @@ public class GameLauncher extends Application {
                 double y = mouseEvent.getY();
 
                 // Create a blue rectangle at the mouse click position
-                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                Rectangle rectangle = new Rectangle(x, y, 10, 10);
                 rectangle.setFill(Color.BLUE);
 
                 // Add the rectangle to the root group
@@ -199,25 +201,25 @@ public class GameLauncher extends Application {
             } else if (isWKeyPressed) {
                 double x = mouseEvent.getX();
                 double y = mouseEvent.getY();
-                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                Rectangle rectangle = new Rectangle(x, y, 10, 10);
                 rectangle.setFill(MAGENTA);
                 root.getChildren().add(rectangle);
             } else if (isEKeyPressed) {
                 double x = mouseEvent.getX();
                 double y = mouseEvent.getY();
-                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                Rectangle rectangle = new Rectangle(x, y, 10, 10);
                 rectangle.setFill(PURPLE);
                 root.getChildren().add(rectangle);
             } else if (isRKeyPressed) {
                 double x = mouseEvent.getX();
                 double y = mouseEvent.getY();
-                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                Rectangle rectangle = new Rectangle(x, y, 10, 10);
                 rectangle.setFill(GREEN);
                 root.getChildren().add(rectangle);
             } else if (isTKeyPressed) {
                 double x = mouseEvent.getX();
                 double y = mouseEvent.getY();
-                Rectangle rectangle = new Rectangle(x, y, 20, 20);
+                Rectangle rectangle = new Rectangle(x, y, 10, 10);
                 rectangle.setFill(RED);
                 root.getChildren().add(rectangle);
             }
@@ -249,6 +251,21 @@ public class GameLauncher extends Application {
                 isTKeyPressed = !isTKeyPressed;
             }
         });
+
+        playerOneScoreText = new Text("Player 1 Score: " + pOneScore);
+        playerOneScoreText.setFill(Color.WHITE);
+        playerOneScoreText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        playerOneScoreText.setX(scene.getWidth() - 150);
+        playerOneScoreText.setY(scene.getHeight() - 30);
+
+        playerTwoScoreText = new Text("Player 2 Score: " + pTwoscore);
+        playerTwoScoreText.setFill(Color.WHITE);
+        playerTwoScoreText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        playerTwoScoreText.setX(scene.getWidth() - 150);
+        playerTwoScoreText.setY(scene.getHeight() - 10);
+
+        // Add the Text nodes to the root group
+        root.getChildren().addAll(playerOneScoreText, playerTwoScoreText);
 
         // Create the top half of the hexagonal grid
         for (int i = 0; i < maxColumns / 2 + 1; i++) {
@@ -456,8 +473,15 @@ public class GameLauncher extends Application {
         stage.show();
 
     }
-
+    public static void updatePlayerScores() {
+        root.getChildren().remove(playerOneScoreText);
+        root.getChildren().remove(playerTwoScoreText);
+        // Update the Text nodes with current scores
+        playerOneScoreText.setText("Player 1 Score: " + pOneScore);
+        playerTwoScoreText.setText("Player 2 Score: " + pTwoscore);
+    }
     private static void displayText(){
+
         if(round % 2 != 0){
             playerTurn = new Text("Player 1's turn");
             playerTurn.setX(600);
@@ -466,16 +490,20 @@ public class GameLauncher extends Application {
             playerTurn.setStroke(Color.RED);
             playerTurn.setStrokeWidth(0.2);
             playerTurn.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+            if(round == 1)
             root.getChildren().add(playerTurn);
-
-
             confirmationText.setX(20);
             confirmationText.setY(20);
             confirmationText.setFill(Color.WHITE);
             confirmationText.setStroke(Color.RED);
             confirmationText.setStrokeWidth(0.2);
             confirmationText.setVisible(false);
+            if(round == 1)
             root.getChildren().add(confirmationText);
+
+            if (round >= 2)
+                updatePlayerScores();
         }
         else {
             playerTurn.setText("Player 2's turn");
@@ -483,8 +511,7 @@ public class GameLauncher extends Application {
             playerTurn.setStroke(Color.RED);
             confirmationText.setVisible(false);
             System.out.println("Round: " + round);
-            System.out.println("\nPlayer one has " + pOneScore + " points");
-            System.out.println("\nPlayer two has " + pTwoscore + " points");
+            updatePlayerScores();
         }
 
     }
