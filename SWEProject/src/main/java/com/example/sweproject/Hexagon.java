@@ -10,6 +10,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 
+import java.math.RoundingMode;
 import java.util.*;
 
 import static com.example.sweproject.GameLauncher.*;
@@ -78,12 +79,13 @@ public class Hexagon {
 
     private void handleGuessTurn(){
         confirmationText.setVisible(false);
+        settersText.setText("Click arrows to shoot rays and \n\tdeduce where atoms are\nexit points are shown by blue\n\tcircles with red outline");
+        settersText.setX(590);
+        settersText.setFill(Color.BLUE);
+        settersText.setStroke(Color.BLUE);
         toggleAtoms(false);
-        if(round % 2 == 0) {
-            playerTurn.setText("Player 1's Turn");
-        }else{
-            playerTurn.setText("Player 2's Turn");
-        }
+
+        playerTurn.setText("Player 2's Turn");
         playerTurn.setFill(Color.BLUE);
         playerTurn.setStroke(Color.BLUE);
 
@@ -163,13 +165,32 @@ public class Hexagon {
                         for (Circle c : guessAtoms) {
                             GameLauncher.root.getChildren().remove(c);
                         }
+                        for (Circle c : exitPoints){
+                            GameLauncher.root.getChildren().remove(c);
+                        }
+                        for (Arrow c : shotArrows){
+                            c.clear();
+                            GameLauncher.root.getChildren().remove(c);
+                        }
+                        shotArrows.clear();
                         guessedHexagons.clear();
                         atoms.clear();
                         rings.clear();
+                        exitPoints.clear();
                         Ray.clearRays();
                         GameLauncher.round++;
                         guesses = 0;
                         toggleGuessersTurn();
+
+                        rayInfoText.setText(" ");
+                        playerTurn.setText("Player 1's turn");
+                        settersText.setText("Please select hexagons to place atoms");
+                        roundText.setText("Round " + round);
+                        settersText.setX(570);
+                        settersText.setY(40);
+                        settersText.setFill(Color.RED);
+                        settersText.setStroke(Color.RED);
+
                         GameLauncher.startBoard();
                     }
                 });

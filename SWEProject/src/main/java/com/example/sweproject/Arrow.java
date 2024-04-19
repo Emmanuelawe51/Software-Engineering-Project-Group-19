@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.sweproject.GameLauncher.*;
-import static javafx.scene.paint.Color.RED;
-import static javafx.scene.paint.Color.WHITE;
+import static javafx.scene.paint.Color.*;
 
 
 public class Arrow {
@@ -166,6 +165,7 @@ public class Arrow {
                 double rayStartY = y;
 
                 boolean absorbed = false;
+                rayInfoText.setText("No hit");
 
                 while (isValidCoordinate(xCord, yCord) && !absorbed) {
 
@@ -174,28 +174,30 @@ public class Arrow {
                         Direction dOfAoi = nextPoint.getPointOfAreaOfInfluence1();
                         int defType = nextPoint.getDeflectionType();
 
-                        System.out.println("detected");
+                        //System.out.println("detected");
                         if (dOfAoi == this.arrowDirection.iterate(3) && defType == 1 || defType == -1) {    //when there is an absorbtion
                             absorbed = true;
-                            System.out.println("absorbed");
+                            rayInfoText.setText("Absorbed");
                         } else if (defType == 1) {                           //when there is a single collision i.e. 60 degrees
+                            rayInfoText.setText("Deflected");
                             if (dOfAoi.iterate(2) == this.arrowDirection) {  //deflection logic
                                 this.arrowDirection = dOfAoi.iterate(1);
                             } else {
                                 this.arrowDirection = dOfAoi.iterate(5);
                             }
-                            System.out.println("deflected 60");
-                        } else if (defType == 2) {                          //when there is a 120 degree deflection
+                            //System.out.println("deflected 60");
+                        } else if (defType == 2) {      ;//when there is a 120 degree deflection
+                            rayInfoText.setText("Deflected");
                             if (this.arrowDirection == dOfAoi.iterate(3)) {
                                 this.arrowDirection = nextPoint.getPointOfAreaOfInfluence2();
                                 System.out.println(nextPoint.getPointOfAreaOfInfluence2());
                             } else {
                                 this.arrowDirection = dOfAoi;
                             }
-                            System.out.println("deflected 120");
+                            //System.out.println("deflected 120");
                         } else {                                                //when there is a 180 degrees i.e reflection
                             this.arrowDirection = this.arrowDirection.iterate(3);
-                            System.out.println("reflected 180");
+                            rayInfoText.setText("Reflected");
                         }
                     }
 
@@ -249,20 +251,32 @@ public class Arrow {
                 if (!absorbed) {
                     rayEndX = rayStartX + getXchange(arrowDirection) / 2;
                     rayEndY = rayStartY + getYchange(arrowDirection) / 2;
-                    Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
-                    rayArrayList.add(ray);
-                    ray.setVisible(true);
-                    root.getChildren().add(ray.getOutline());
+                    //Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
+
+                    Circle circle = new Circle(rayEndX, rayEndY, 7); // Adjust the radius as needed
+                    circle.setFill(BLUE); // Set color as needed
+                    circle.setStroke(PURPLE);
+                    root.getChildren().add(circle);
+                    exitPoints.add(circle);
+                    //ray.setVisible(true);
+                    //root.getChildren().add(ray.getOutline());
                 }
 
                 rayShot = true;
-                Ray.promptForExitPoint();
-                arrow.setFill(Color.TRANSPARENT);
+                //Ray.promptForExitPoint();
+                arrow.setStroke(BLUE);
+                arrow.setFill(BLUE);
+                shotArrows.add(this);
             }
         });
     }
 
-
+    public void clear(){
+        arrow.setFill(Color.TRANSPARENT);
+        // This line sets the outline color of the arrow to yellow
+        arrow.setStroke(Color.YELLOW);
+        this.rayShot = false;
+    }
 
     //function to check validity
     private boolean isValidCoordinate(int x, int y) {
@@ -272,6 +286,7 @@ public class Arrow {
 
     //resets the colour of the arrow when the mouse is no longer hovering
     private void addMouseExitHandler() {arrow.setOnMouseExited(event -> {
+        if(!rayShot)
         arrow.setFill(Color.TRANSPARENT);
     });
 
