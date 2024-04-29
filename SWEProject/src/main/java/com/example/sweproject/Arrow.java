@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.sweproject.GameLauncher.*;
+import static com.example.sweproject.Hexagon.guesses;
 import static javafx.scene.paint.Color.*;
 
 
@@ -155,7 +156,7 @@ public class Arrow {
         });
 
         arrow.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
-            if(!rayShot) {
+            if(!rayShot && guesses != 6) {
                 int xCord = coord[0];
                 int yCord = coord[1];
                 //getting the coordinates of the center of the hexagons we need
@@ -185,7 +186,6 @@ public class Arrow {
                             } else {
                                 this.arrowDirection = dOfAoi.iterate(5);
                             }
-                            //System.out.println("deflected 60");
                         } else if (defType == 2) {      ;//when there is a 120 degree deflection
                             rayInfoText.setText("Deflected");
                             if (this.arrowDirection == dOfAoi.iterate(3)) {
@@ -194,7 +194,6 @@ public class Arrow {
                             } else {
                                 this.arrowDirection = dOfAoi;
                             }
-                            //System.out.println("deflected 120");
                         } else {                                                //when there is a 180 degrees i.e reflection
                             this.arrowDirection = this.arrowDirection.iterate(3);
                             rayInfoText.setText("Reflected");
@@ -294,12 +293,13 @@ public class Arrow {
     //sets the colour of the arrow when the mouse is hovering above the arrow
     private void addMouseEnterHandler() {
         arrow.setOnMouseEntered(event -> {
-                if(!rayShot)
+                if(!rayShot && guesses != 6)
                 arrow.setFill(Color.DARKRED);
             });
     }
 
     //two functions to get the change of coordinates for each direction
+    //this is for the calculation of the exit point
     private double getYchange(Direction d){
         return switch (d) {
             case NORTHEAST -> coordinatesOfCenters[2][3].getY() - coordinatesOfCenters[3][3].getY();

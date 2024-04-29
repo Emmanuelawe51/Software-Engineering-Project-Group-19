@@ -17,6 +17,7 @@ public class Coordinate {
     private Arrow.Direction pointOfAreaOfInfluence1;
     private Arrow.Direction pointOfAreaOfInfluence2;
     public void setPointOfAreaOfInfluence(Arrow.Direction direction) {
+
         if(deflectionType == 0)
         {
             pointOfAreaOfInfluence1 = direction;
@@ -24,11 +25,12 @@ public class Coordinate {
         } else if (deflectionType == 1) {
             pointOfAreaOfInfluence2 = direction;
             deflectionType++;
-            if(!(direction.iterate(1) == pointOfAreaOfInfluence1 || direction.iterate(5) == pointOfAreaOfInfluence1))
+            if(!(direction.iterate(1) == pointOfAreaOfInfluence1 || direction.iterate(5) == pointOfAreaOfInfluence1)) //checking if it is 180 case or 120 case for 2 aoi
                 deflectionType = 3;
         } else if (deflectionType != -1){
             deflectionType = 3;
         }
+        //this sets the deflection type to the correct deflection type with correct direction of this point
 
 
     }

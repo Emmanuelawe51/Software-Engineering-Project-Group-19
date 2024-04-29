@@ -58,12 +58,6 @@ public class Ray {
             c.setVisible(true);
         }
     }
-    public static void promptForExitPoint() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter the exit point coordinates");
-        int ExitPoint = scanner.nextInt();
-        System.out.println("Exit point : (" + ExitPoint + ")");
-    }
 
     public static void clearRays(){
         Iterator<Ray> iterator = rayArrayList.iterator();

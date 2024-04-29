@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -18,8 +19,11 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.example.sweproject.Ray.showRays;
+import static com.example.sweproject.Hexagon.toggleAtoms;
+import static com.example.sweproject.GameUtils.displayText;
+import static com.example.sweproject.GameUtils.setGuessersTurn;
 import static javafx.scene.paint.Color.*;
 
 public class GameLauncher extends Application {
@@ -27,9 +31,7 @@ public class GameLauncher extends Application {
     public static Stage stage;
     public static Group root;
     public static Scene scene ;
-    //variable used to track the number of arrows
     public static int numberLabel = 0;
-    //stores the coordinates of the center of the hexagons
 
     //round number
     public static int round = 1;
@@ -37,12 +39,15 @@ public class GameLauncher extends Application {
     //score of players one and two
     public static int pOneScore = 0;
     public static int pTwoscore = 0;
-    private static Text playerOneScoreText;
-    private static Text playerTwoScoreText;
-    public static Coordinate[][] coordinatesOfCenters = new Coordinate[9][9];
+    public static Text playerOneScoreText;
+    public static Text playerTwoScoreText;
+    public static Coordinate[][] coordinatesOfCenters = new Coordinate[9][9]; //stores the centres of all the hexagons
     public static ArrayList<Ray> rayArrayList = new ArrayList<>();
     public static ArrayList<Circle> exitPoints = new ArrayList<>();
     public static  ArrayList<Arrow> shotArrows = new ArrayList<>();
+    public static final List<Circle> atoms = new ArrayList<>();
+    public static final List<Circle> rings = new ArrayList<>();
+    public static final List<Circle> guessAtoms = new ArrayList<>();
     private static boolean isQKeyPressed = false;
     private static boolean isWKeyPressed = false;
     private static boolean isEKeyPressed = false;
@@ -148,8 +153,8 @@ public class GameLauncher extends Application {
                         "- After 6 guesses, the terminal will say guesses are done and to press P where the game will reset and roles reversed, Lowest score at the end wins!"
 
         );
-        rulesText.setFill(Color.WHITE); // Set the text color to white
-        rulesText.setWrappingWidth(700); // Set the wrapping width to fit the scene
+        rulesText.setFill(Color.WHITE);
+        rulesText.setWrappingWidth(700);
         rulesText.setFont(new Font(20));
         rulesText.setTextAlignment(TextAlignment.JUSTIFY); // Justify the text
 
@@ -170,7 +175,6 @@ public class GameLauncher extends Application {
     }
 
 
-
     public static void startBoard()
     {
         displayText();
@@ -180,10 +184,7 @@ public class GameLauncher extends Application {
         }else{
             System.out.println("\nPlayer one's turn to set and player two's turn to experiment");
         }
-        //loading the main icon from the resources directory
-        //Image icon = new Image(getClass().getResource("/MainIcon.png").toExternalForm());
-        //stage.getIcons().add(icon);
-        //side length and height of hexagon
+
         double side = 40;
         double height = side * Math.sqrt(3);
         // Maximum number of columns in the middle of the hexagonal grid
@@ -229,6 +230,13 @@ public class GameLauncher extends Application {
                 rectangle.setFill(RED);
                 root.getChildren().add(rectangle);
             }
+
+            if(confirmationText.isVisible()){
+                if(!guessersTurn)               //buffer to allow for confirmation text to be visible
+                    guessersTurn = true;
+                else
+                setGuessersTurn();
+            }
         });
 
         scene.setOnKeyPressed(keyEvent -> {
@@ -258,20 +266,6 @@ public class GameLauncher extends Application {
             }
         });
 
-        playerOneScoreText = new Text("Player 1 Score: " + pOneScore);
-        playerOneScoreText.setFill(Color.WHITE);
-        playerOneScoreText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        playerOneScoreText.setX(scene.getWidth() - 150);
-        playerOneScoreText.setY(scene.getHeight() - 30);
-
-        playerTwoScoreText = new Text("Player 2 Score: " + pTwoscore);
-        playerTwoScoreText.setFill(Color.WHITE);
-        playerTwoScoreText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        playerTwoScoreText.setX(scene.getWidth() - 150);
-        playerTwoScoreText.setY(scene.getHeight() - 10);
-
-        // Add the Text nodes to the root group
-        root.getChildren().addAll(playerOneScoreText, playerTwoScoreText);
 
         // Create the top half of the hexagonal grid
         for (int i = 0; i < maxColumns / 2 + 1; i++) {
@@ -479,75 +473,8 @@ public class GameLauncher extends Application {
         stage.show();
 
     }
-    public static void updatePlayerScores() {
-        root.getChildren().remove(playerOneScoreText);
-        root.getChildren().remove(playerTwoScoreText);
-        // Update the Text nodes with current scores
-        playerOneScoreText.setText("Player 1 Score: " + pOneScore);
-        playerTwoScoreText.setText("Player 2 Score: " + pTwoscore);
-    }
-    private static void displayText(){
-
-        if(round  == 1){
-            playerTurn = new Text("Player 1's turn");
-            playerTurn.setX(600);
-            playerTurn.setY(20);
-            playerTurn.setFill(Color.RED);
-            playerTurn.setStroke(Color.RED);
-            playerTurn.setStrokeWidth(0.2);
-            playerTurn.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-
-            confirmationText.setX(20);
-            confirmationText.setY(30);
-            confirmationText.setFill(Color.WHITE);
-            confirmationText.setStroke(Color.RED);
-            confirmationText.setStrokeWidth(0.2);
-            confirmationText.setVisible(false);
-
-            roundText = new Text("Round 1");
-            roundText.setX(10);
-            roundText.setY(590);
-            roundText.setFill(Color.WHITE);
-            roundText.setStroke(Color.RED);
-            roundText.setStrokeWidth(0.2);
-            roundText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-
-            rayInfoText = new Text(" ");
-            rayInfoText.setX(10);
-            rayInfoText.setY(560);
-            rayInfoText.setFill(Color.BLUE);
-            rayInfoText.setStroke(BLUE);
-            rayInfoText.setStrokeWidth(0.2);
-            rayInfoText.setFont(Font.font("Arial", FontWeight.BOLD, 25));
 
 
-            settersText.setText("Please select hexagons to place atoms");
-            settersText.setX(570);
-            settersText.setY(40);
-            settersText.setFill(Color.RED);
-            settersText.setStroke(Color.RED);
-            settersText.setStrokeWidth(0.2);
-            settersText.setFont(Font.font("Arial", FontWeight.BOLD, 10));
-            if(round == 1) {
-                root.getChildren().add(settersText);
-                root.getChildren().add(confirmationText);
-                root.getChildren().add(playerTurn);
-                root.getChildren().add(roundText);
-                root.getChildren().add(rayInfoText);
-            }
-
-            if (round >= 2)
-                updatePlayerScores();
-        }
-        else {
-            playerTurn.setFill(Color.RED);
-            playerTurn.setStroke(Color.RED);
-            confirmationText.setVisible(false);
-            System.out.println("Round: " + round);
-            updatePlayerScores();
-        }
-
-    }
     /*
     public static void resetGame() {
         root.getChildren().clear();

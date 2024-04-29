@@ -1,29 +1,21 @@
 package com.example.sweproject;
-import javafx.application.Application;
-import javafx.scene.Group;
+
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
-import javafx.scene.input.KeyCode;
-import javafx.scene.text.Text;
 
-import java.math.RoundingMode;
 import java.util.*;
 
 import static com.example.sweproject.GameLauncher.*;
-import static com.example.sweproject.Ray.hideRays;
-import static javafx.scene.paint.Color.RED;
-import static javafx.scene.paint.Color.WHITE;
+import static com.example.sweproject.GameUtils.endRound;
+import static com.example.sweproject.GameUtils.updatePlayerScores;
 
 public class Hexagon {
 
-    private static boolean isVisible = true;
-    private static final List<Circle> atoms = new ArrayList<>();
-    private static final List<Circle> rings = new ArrayList<>();
-    private static final List<Circle> guessAtoms = new ArrayList<>();
     private final double xCord;
     private final double yCord;
     //hold the relative position of the hexagon in the coordinatesOfCenters array
@@ -32,6 +24,7 @@ public class Hexagon {
     private final double side;
     private final Polygon hexagon;
     private boolean isClicked = false;
+    public static boolean guessersTurnBuffer = false;
 
 
 
@@ -77,35 +70,26 @@ public class Hexagon {
             setAreaOfInfluence(i, j);
     }
 
-    private void handleGuessTurn(){
-        confirmationText.setVisible(false);
-        settersText.setText("Click arrows to shoot rays and \n\tdeduce where atoms are\nexit points are shown by blue\n\tcircles with red outline");
-        settersText.setX(590);
-        settersText.setFill(Color.BLUE);
-        settersText.setStroke(Color.BLUE);
-        toggleAtoms(false);
+    private void handleGuessTurn(){  //experimenters turn
 
-        playerTurn.setText("Player 2's Turn");
-        playerTurn.setFill(Color.BLUE);
-        playerTurn.setStroke(Color.BLUE);
-
-        if (!hexagonToCircles.getOrDefault(hexagon, Collections.emptyList()).isEmpty()) {
-            System.out.println("Atom found");
-            guesses++;
-        } else {
-            System.out.println("No atom");
-            guesses++;
-            if (GameLauncher.round % 2 != 0) {
-                pTwoscore = pTwoscore + 5;
-            } else {
-                pOneScore = pOneScore + 5;
-            }
-        }
-
-        if(!guessersTurn){
-            toggleGuessersTurn();
+        if(!guessersTurnBuffer){
+            guessersTurnBuffer = true;
         }else {
-            Circle atomCircle = new Circle(xCord, yCord - side, side / 2);
+            if (!hexagonToCircles.getOrDefault(hexagon, Collections.emptyList()).isEmpty()) {
+                System.out.println("Atom found");
+                guesses++;
+            } else {
+                System.out.println("No atom");
+                guesses++;
+                if (GameLauncher.round % 2 != 0) {
+                    pTwoscore = pTwoscore + 5;
+                } else {
+                    pOneScore = pOneScore + 5;
+                }
+
+                updatePlayerScores();
+            }
+            Circle atomCircle = new Circle(xCord, yCord - side, side / 2); //guessers circles
             RadialGradient gradient = new RadialGradient(
                     0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE,
                     new javafx.scene.paint.Stop(0, Color.BLUE),
@@ -135,65 +119,12 @@ public class Hexagon {
                     confirmationText.setVisible(true);
                 }
 
-            }  else if (guesses != 7) {
-                //System.out.println("setter mate432242 " + guessersTurn);
-                //System.out.println("here 3");
+            }  else if (guesses != 6) {
                 handleGuessTurn();
             }
 
-            if (guesses == 7) {
-                System.out.println("All Guesses Complete press P to start next round");
-                Ray.showRays();
-                for (Circle atom : atoms){
-                    atom.setVisible(isVisible);
-                }
-                for (Circle ring : rings){
-                    ring.setVisible(isVisible);
-                }
-
-                scene.setOnKeyPressed(keyEvent -> {
-                    if (keyEvent.getCode() == KeyCode.P) {
-                        for (Circle atom : atoms) {
-                            GameLauncher.root.getChildren().remove(atom);
-                        }
-                        for (Circle ring : rings) {
-                            GameLauncher.root.getChildren().remove(ring);
-                        }
-                        for (Hexagon c: guessedHexagons){
-                            c.toggleIsClicked();
-                        }
-                        for (Circle c : guessAtoms) {
-                            GameLauncher.root.getChildren().remove(c);
-                        }
-                        for (Circle c : exitPoints){
-                            GameLauncher.root.getChildren().remove(c);
-                        }
-                        for (Arrow c : shotArrows){
-                            c.clear();
-                            GameLauncher.root.getChildren().remove(c);
-                        }
-                        shotArrows.clear();
-                        guessedHexagons.clear();
-                        atoms.clear();
-                        rings.clear();
-                        exitPoints.clear();
-                        Ray.clearRays();
-                        GameLauncher.round++;
-                        guesses = 0;
-                        toggleGuessersTurn();
-
-                        rayInfoText.setText(" ");
-                        playerTurn.setText("Player 1's turn");
-                        settersText.setText("Please select hexagons to place atoms");
-                        roundText.setText("Round " + round);
-                        settersText.setX(570);
-                        settersText.setY(40);
-                        settersText.setFill(Color.RED);
-                        settersText.setStroke(Color.RED);
-
-                        GameLauncher.startBoard();
-                    }
-                });
+            if (guesses == 6) {
+              endRound();
             }
 
            //printNoOfAreaOfInfluence(GameLauncher.coordinatesOfCenters);
@@ -333,11 +264,7 @@ public class Hexagon {
     public Polygon getHexagon() {
         return hexagon;
     }
-    private void toggleGuessersTurn()
-    {
-        guessersTurn = !guessersTurn;
-    }
-    private void toggleIsClicked(){
+    void toggleIsClicked(){
         isClicked = !isClicked;
     }
 
@@ -362,7 +289,7 @@ public class Hexagon {
         return hexagon;
     }
 
-//method for debugging
+
     public static void printNoOfAreaOfInfluence(Coordinate[][] coordinatesOfCenters) {
         int numRows = coordinatesOfCenters.length;
         int numCols = coordinatesOfCenters[0].length;
@@ -397,4 +324,5 @@ public class Hexagon {
             }
         }
     }
+
 }
