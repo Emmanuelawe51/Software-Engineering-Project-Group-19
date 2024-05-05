@@ -146,6 +146,26 @@ public class Arrow {
     public Polygon getArrow() {
         return arrow;
     }
+    /**
+     *   The `ShootRay` method handles ray shooting in a game.
+     *   <p>
+     *    It increments player scores, checks if a ray has been shot,
+     *   and implements ray shooting logic. This includes getting hexagon center coordinates, setting ray positions,
+     *   <p>
+     *   Initializing absorption status, and looping until coordinates are valid and the ray is not absorbed.
+     *   In the loop, it checks coordinate validity and deflection type, handles absorption, deflection, and reflection,
+     *   creates a new Ray object, updates ray positions, and moves to the next coordinate.
+     *   <p>
+     *   If the ray is not absorbed by the end of the loop, it sets the last ray path, creates a Circle object at the ray's
+     *   ending position, and updates the rayShot and arrow variables.
+     *
+     * @see MouseEvent#MOUSE_PRESSED
+     * @see Coordinate
+     * @see Direction
+     * @see Ray
+     *
+     * @return void
+     */
     public void ShootRay() {
         arrow.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
             if(GameLauncher.round % 2 == 0){

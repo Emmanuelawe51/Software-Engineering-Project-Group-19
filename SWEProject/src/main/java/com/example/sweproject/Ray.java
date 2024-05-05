@@ -70,8 +70,6 @@ public class Ray {
         }
     }
     public Line getOutline() {return outline;}
-    public Line getLine() {
-        return line;
-    }
+
 
 }

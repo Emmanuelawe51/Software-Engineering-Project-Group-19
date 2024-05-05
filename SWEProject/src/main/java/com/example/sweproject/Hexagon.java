@@ -43,6 +43,7 @@ public class Hexagon {
     }
 
     private void handleAtomSetting(){
+        //creating the Atom's appearance
             Circle atomCircle = new Circle(xCord, yCord - side, side / 2);
             RadialGradient gradient = new RadialGradient(
                     0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE,
@@ -57,6 +58,7 @@ public class Hexagon {
             GameLauncher.AtomCount++;
             atoms.add(atomCircle);
 
+            // creating the Atom's area of incluence
             double dottedCircleRadius = side * 1.73;
             Circle dottedCircle = new Circle(xCord, yCord - side, dottedCircleRadius);
             dottedCircle.setStroke(Color.WHITE);
@@ -71,14 +73,16 @@ public class Hexagon {
     }
 
     private void handleGuessTurn(){  //experimenters turn
-
+        // If it's not the guesser's turn, set the buffer to true
         if(!guessersTurnBuffer){
             guessersTurnBuffer = true;
         }else {
+            // If there are Atoms in the hexagon, increment the guess count
             if (!hexagonToCircles.getOrDefault(hexagon, Collections.emptyList()).isEmpty()) {
                 System.out.println("Atom found");
                 guesses++;
             } else {
+                // If there are no Atoms in the hexagon, increment the guess count and update the score
                 System.out.println("No atom");
                 guesses++;
                 if (GameLauncher.round % 2 != 0) {
@@ -89,6 +93,7 @@ public class Hexagon {
 
                 updatePlayerScores();
             }
+            // Blue circles for visuals of the guesser's guesses
             Circle atomCircle = new Circle(xCord, yCord - side, side / 2); //guessers circles
             RadialGradient gradient = new RadialGradient(
                     0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE,

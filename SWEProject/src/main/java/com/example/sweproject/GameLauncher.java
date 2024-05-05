@@ -173,8 +173,23 @@ public class GameLauncher extends Application {
         preRoot.getChildren().addAll(rulesText, startText);
         preloader.show();
     }
-
-
+    /**
+     * This method initializes the game board.
+     * <p>
+     * It displays the text, sets the atom count, and prints the player's turn.
+     * It also sets up the hexagonal grid for the game and adds mouse event handlers for the scene.
+     * <p>
+     * The mouse event handlers handle the logic for marking the board by the experimenter and setting the guesser's turn.
+     * <p>
+     * The method also sets up key event handlers for the scene to handle the logic for marking deflections, absorptions, and no hits.
+     * <p>
+     * Finally, it creates and places the arrows on the board
+     *
+     * @see Hexagon
+     * @see Arrow
+     *
+     * @return void
+     */
     public static void startBoard()
     {
         displayText();
@@ -240,9 +255,6 @@ public class GameLauncher extends Application {
         });
 
         scene.setOnKeyPressed(keyEvent -> {
-           /* if (keyEvent.getCode() == KeyCode.R) {
-                resetGame();
-            } */
             // for the experimenter to mark what he thinks to be 60 degree deflections
             if (keyEvent.getCode() == KeyCode.Q) {
                 isQKeyPressed = !isQKeyPressed;
@@ -265,7 +277,6 @@ public class GameLauncher extends Application {
                 isTKeyPressed = !isTKeyPressed;
             }
         });
-
 
         // Create the top half of the hexagonal grid
         for (int i = 0; i < maxColumns / 2 + 1; i++) {
@@ -451,35 +462,12 @@ public class GameLauncher extends Application {
 
 
         }
-        /*//printing for testing
-        for (int i = 0; i < coordinatesOfCenters.length; i++) {
-            for (int j = 0; j < coordinatesOfCenters[i].length; j++) {
-                // Print the coordinates of the current Coordinate object
-                System.out.println("Coordinates at (" + i + ", " + j + "): " + coordinatesOfCenters[i][j]);
-            }
-        }*/
-
-
-
         //sets title of window/stage
         stage.setTitle("Black Box+");
 
-
-        //below code not needed right now
-        // stage.setFullScreen(true);
-        // stage.setFullScreenExitHint("Press Esc to leave full screen");
         //how stage is shown
         stage.setScene(scene);
         stage.show();
 
     }
-
-
-    /*
-    public static void resetGame() {
-        root.getChildren().clear();
-        round++;
-        startBoard();
-    }
-*/
 }
