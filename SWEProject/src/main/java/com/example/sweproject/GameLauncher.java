@@ -267,7 +267,7 @@ public class GameLauncher extends Application {
                 if(!guessersTurn)               //buffer to allow for confirmation text to be visible
                     guessersTurn = true;
                 else
-                setGuessersTurn();
+                    setGuessersTurn();
             }
         });
 
@@ -486,5 +486,9 @@ public class GameLauncher extends Application {
         stage.setScene(scene);
         stage.show();
 
+    }
+
+    public int AtomCount() {
+        return AtomCount;
     }
 }

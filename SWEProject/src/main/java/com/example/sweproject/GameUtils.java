@@ -31,8 +31,11 @@ public class GameUtils {
             playerTwoScoreText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
             playerTwoScoreText.setX(scene.getWidth() - 150);
             playerTwoScoreText.setY(scene.getHeight() - 10);
-
-            playerTurn = new Text("Player 1's turn");
+            if(round % 2 != 0) {
+                playerTurn = new Text("Player 1's turn");
+            }else{
+                playerTurn = new Text ("Player 2's turn");
+            }
             playerTurn.setX(600);
             playerTurn.setY(20);
             playerTurn.setFill(Color.RED);
@@ -47,7 +50,7 @@ public class GameUtils {
             confirmationText.setStrokeWidth(0.2);
             confirmationText.setVisible(false);
 
-            roundText = new Text("Round 1");
+            roundText = new Text("Round " + round);
             roundText.setX(10);
             roundText.setY(590);
             roundText.setFill(Color.WHITE);
@@ -100,7 +103,11 @@ public class GameUtils {
         settersText.setStroke(Color.BLUE);
         toggleAtoms(false);
 
-        playerTurn.setText("Player 2's Turn");
+        if(round % 2 != 0) {
+            playerTurn.setText("Player 2's Turn");
+        }else{
+            playerTurn.setText("Player 1's Turn");
+        }
         playerTurn.setFill(Color.BLUE);
         playerTurn.setStroke(Color.BLUE);
 
@@ -155,7 +162,11 @@ public class GameUtils {
                 guessersTurnBuffer = false;
 
                 rayInfoText.setText(" ");
-                playerTurn.setText("Player 1's turn");
+                if(round % 2 != 0) {
+                    playerTurn.setText("Player 1's turn");
+                }else{
+                    playerTurn.setText("Player 2's turn");
+                }
                 settersText.setText("Please select hexagons to place atoms");
                 roundText.setText("Round " + round);
                 settersText.setX(570);

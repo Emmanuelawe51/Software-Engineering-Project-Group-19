@@ -16,6 +16,7 @@ import static com.example.sweproject.GameUtils.updatePlayerScores;
 
 public class Hexagon {
 
+
     private final double xCord;
     private final double yCord;
     //hold the relative position of the hexagon in the coordinatesOfCenters array
@@ -23,7 +24,7 @@ public class Hexagon {
     public static int guesses = 0;
     private final double side;
     private final Polygon hexagon;
-    private boolean isClicked = false;
+    public static boolean isClicked = false;
     public static boolean guessersTurnBuffer = false;
 
 
@@ -261,7 +262,7 @@ public class Hexagon {
         hexagon.setOnMouseEntered(event -> {
             // Perform actions when mouse enters hexagon
             if(!isClicked)
-            hexagon.setFill(Color.DARKRED);
+                hexagon.setFill(Color.DARKRED);
         });
     }
 
@@ -294,40 +295,5 @@ public class Hexagon {
         return hexagon;
     }
 
-
-    public static void printNoOfAreaOfInfluence(Coordinate[][] coordinatesOfCenters) {
-        int numRows = coordinatesOfCenters.length;
-        int numCols = coordinatesOfCenters[0].length;
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        // Print upper part of the hexagonal pattern
-        int initialNum = 5;
-        for (int i = 0; i < numRows; i++) {
-            // Adjust spacing for offset rows to make hexagons appear in a honeycomb pattern
-            for (int k = initialNum; k < 9; k++) {
-                System.out.print("  ");
-            }
-
-            // Print number of area of influence
-            for (int j = 0; j < initialNum && j < numCols; j++) {
-                if (coordinatesOfCenters[i][j] != null) {
-                    Coordinate coordinate = coordinatesOfCenters[i][j];
-                    System.out.print(coordinate.getDeflectionType() + "   ");
-                } else {
-                    System.out.print("0 ");
-                }
-            }
-            System.out.println();
-
-            // Update initialNum for the next row
-            if (i < 4) {
-                initialNum++;
-            } else {
-                initialNum--;
-            }
-        }
-    }
 
 }
