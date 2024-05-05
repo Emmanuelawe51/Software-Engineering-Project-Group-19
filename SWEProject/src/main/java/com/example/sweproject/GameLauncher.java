@@ -25,7 +25,24 @@ import static com.example.sweproject.Hexagon.toggleAtoms;
 import static com.example.sweproject.GameUtils.displayText;
 import static com.example.sweproject.GameUtils.setGuessersTurn;
 import static javafx.scene.paint.Color.*;
-
+/**
+ * The GameLauncher class is responsible for launching the Black Box+ game application.
+ * <p>
+ * This class initializes the game board, handles user inputs, and manages the game flow.
+ * It contains methods for displaying the rules, setting up the game board, and handling mouse and key events.
+ * <p>
+ * The game follows a turn-based system where one player sets up atoms on the board while the other player tries to deduce their positions.
+ * The players take turns as the setter and experimenter, with specific rules governing each role's actions.
+ * <p>
+ * The game interface consists of a hexagonal grid representing the "black box" where atoms are placed and rays are shot.
+ * Players interact with the grid to mark their guesses and observations.
+ * <p>
+ * The GameLauncher class extends the JavaFX Application class and utilizes JavaFX components for the graphical user interface.
+ *
+ * @author Sean Okafor, Mohanad Mohamed, and Emmanuel Awe
+ * @version 1.0
+ * @since 30-01-2024
+ */
 public class GameLauncher extends Application {
     public static int AtomCount = 0;
     public static Stage stage;

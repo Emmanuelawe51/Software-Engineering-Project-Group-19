@@ -14,7 +14,13 @@ import static com.example.sweproject.GameLauncher.*;
 import static com.example.sweproject.Hexagon.guesses;
 import static javafx.scene.paint.Color.*;
 
-
+/**
+ * The `Arrow` class represents arrows used in the game. Arrows can be placed on the game board and used to shoot rays.
+ * This class provides methods to create and manage arrows, including handling mouse events for shooting rays,
+ * determining arrow directions, and calculating ray paths.
+ *
+ * @see Coordinate
+ */
 public class Arrow {
     private boolean rayShot = false;
     private double x;
@@ -50,6 +56,21 @@ public class Arrow {
         addMouseExitHandler();
         ShootRay();
     }
+    /**
+     * The `Arrow` class represents arrows used in the game. Arrows can be placed on the game board and used to shoot rays.
+     * This class provides methods to create and manage arrows, including handling mouse events for shooting rays,
+     * determining arrow directions, and calculating ray paths.
+     *
+     * @see Direction
+     *
+     * @param x The x-coordinate of the arrow's position.
+     * @param y The y-coordinate of the arrow's position.
+     * @param side The length of the side.
+     * @param direction The direction in which the arrow is pointing.
+     * @param coord An array containing the coordinates of the arrow's position in the 2D array representing the game board.
+     *
+     * @return void
+     */
     public Arrow(double x, double y, double side, Direction direction, int[] coord) {
         this.x = x;
         this.y = y;
