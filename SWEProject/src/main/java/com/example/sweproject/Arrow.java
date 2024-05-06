@@ -19,7 +19,6 @@ import static javafx.scene.paint.Color.*;
  * This class provides methods to create and manage arrows, including handling mouse events for shooting rays,
  * determining arrow directions, and calculating ray paths.
  *
- * @see Coordinate
  */
 public class Arrow {
     private boolean rayShot = false;

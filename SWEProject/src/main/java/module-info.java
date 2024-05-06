@@ -8,6 +8,7 @@ module com.example.sweproject {
     requires org.testfx.junit;
     requires org.testfx;
     requires jdk.dynalink;
+    requires org.junit.jupiter.api;
 
     opens com.example.sweproject to javafx.fxml;
     exports com.example.sweproject;

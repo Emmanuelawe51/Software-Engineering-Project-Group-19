@@ -137,7 +137,9 @@ public class GameLauncher extends Application {
         Text exitText = new Text("Exit");
         exitText.setFont(new Font(50)); // Set the font size to 50
         exitText.setFill(RED);
-        exitText.setOnMouseClicked(event -> System.exit(0));
+        exitText.setOnMouseClicked(event -> {
+            preloader.close();
+        });
 
         // Add the image view and text to the preloader root
         preRoot.getChildren().addAll(imageView, productionText, startText, rulesText, exitText);
