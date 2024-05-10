@@ -94,9 +94,7 @@ public class Arrow {
                 x + height / 3, y - side,
                 x - height / 3, y - side
         );
-        // This line makes the fill color of the arrow transparent
         arrow.setFill(Color.TRANSPARENT);
-        // This line sets the outline color of the arrow to yellow
         arrow.setStroke(Color.YELLOW);
 
         //printing the numbers of the arrows
@@ -278,7 +276,6 @@ public class Arrow {
                                 yCord--;
                             break;
                     }
-                    // Update ray ending position if the next coordinate is valid
                     if (isValidCoordinate(xCord, yCord)) {
                         rayEndX = coordinatesOfCenters[xCord][yCord].getX();
                         rayEndY = coordinatesOfCenters[xCord][yCord].getY();
@@ -290,15 +287,12 @@ public class Arrow {
                 if (!absorbed) {
                     rayEndX = rayStartX + getXchange(arrowDirection) / 2;
                     rayEndY = rayStartY + getYchange(arrowDirection) / 2;
-                    //Ray ray = new Ray(rayStartX, rayStartY, rayEndX, rayEndY, arrowDirection);
 
-                    Circle circle = new Circle(rayEndX, rayEndY, 7); // Adjust the radius as needed
-                    circle.setFill(BLUE); // Set color as needed
+                    Circle circle = new Circle(rayEndX, rayEndY, 7);
+                    circle.setFill(BLUE);
                     circle.setStroke(PURPLE);
                     root.getChildren().add(circle);
                     exitPoints.add(circle);
-                    //ray.setVisible(true);
-                    //root.getChildren().add(ray.getOutline());
                 }
 
                 rayShot = true;
@@ -312,15 +306,8 @@ public class Arrow {
 
     public void clear(){
         arrow.setFill(Color.TRANSPARENT);
-        // This line sets the outline color of the arrow to yellow
         arrow.setStroke(Color.YELLOW);
         this.rayShot = false;
-    }
-
-    //function to check validity
-    private boolean isValidCoordinate(int x, int y) {
-        return x >= 0 && x < coordinatesOfCenters.length &&
-                y >= 0 && y < coordinatesOfCenters[x].length && coordinatesOfCenters[x][y] != null;
     }
 
     //resets the colour of the arrow when the mouse is no longer hovering
@@ -336,6 +323,11 @@ public class Arrow {
                 if(!rayShot && guesses != 6)
                 arrow.setFill(Color.DARKRED);
             });
+    }
+
+    private boolean isValidCoordinate(int x, int y) {
+        return x >= 0 && x < coordinatesOfCenters.length &&
+                y >= 0 && y < coordinatesOfCenters[x].length && coordinatesOfCenters[x][y] != null;
     }
 
     //two functions to get the change of coordinates for each direction

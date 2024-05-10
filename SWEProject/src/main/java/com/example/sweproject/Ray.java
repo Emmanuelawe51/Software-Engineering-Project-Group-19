@@ -40,8 +40,6 @@ public class Ray {
         outline.setVisible(isVisible);
 
         this.rayDirection = direction;
-        // this is just here to see the coordinates of the ray
-       //System.out.println("Ray created from (" + startX + ", " + startY + ") to (" + setEndX + ", " + setEndY + ")"); // Add this line
 
     }
     public void setVisible(boolean bool){
