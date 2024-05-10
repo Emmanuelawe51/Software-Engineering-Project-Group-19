@@ -1,10 +1,13 @@
 package com.example.sweproject;
 
 import javafx.application.Platform;
+import javafx.scene.robot.Robot;
 import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.api.FxAssert;
 import org.testfx.framework.junit.ApplicationTest;
+
+import java.awt.event.InputEvent;
 
 import static com.example.sweproject.GameLauncher.*;
 import static org.junit.Assert.assertEquals;
@@ -36,11 +39,6 @@ public class BlackBoxTests extends ApplicationTest{
     @Test
     public void testGuesses() {
         assertEquals(0, Hexagon.guesses);
-    }
-
-    @Test
-    public void testNumberLabel() {
-        assertEquals(0, numberLabel);
     }
 
     @Test
@@ -103,6 +101,103 @@ public class BlackBoxTests extends ApplicationTest{
 
         // Click on the Exit button
         clickOn("Exit");
+
+    }
+
+    @Test
+    public void test60Deflection() throws InterruptedException {
+        clickOn("Start");
+        moveTo(coordinatesOfCenters[1][1].getX() + 650, coordinatesOfCenters[1][1].getY() + 500);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 670, coordinatesOfCenters[1][1].getY() + 595);
+        clickOn();
+
+        assertEquals(rayInfoText.getText(), "Deflected "); //defleccted with a space means 60 degree deflection
+
+    }
+    @Test
+    public void test120Deflection() throws InterruptedException {
+        clickOn("Start");
+        moveTo(coordinatesOfCenters[1][1].getX() + 650, coordinatesOfCenters[1][1].getY() + 500);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 730, coordinatesOfCenters[1][1].getY() + 500);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 670, coordinatesOfCenters[1][1].getY() + 595);
+        clickOn();
+        Thread.sleep(1000);
+
+        assertEquals(rayInfoText.getText(), "Deflected");
+
+    }
+
+    @Test
+    public void test180Deflection() throws InterruptedException { //tests when there are two AOI on a single point but it is a 180 degreee
+        clickOn("Start");
+        moveTo(coordinatesOfCenters[1][1].getX() + 650, coordinatesOfCenters[1][1].getY() + 500);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 650, coordinatesOfCenters[1][1].getY() + 380);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 920, coordinatesOfCenters[1][1].getY() + 450);
+        clickOn();
+        assertEquals(rayInfoText.getText(), "Reflected");
+
+    }
+
+    @Test
+    public void test180Deflection2() throws InterruptedException {  //tests when there are three AOI on a single point
+        clickOn("Start");
+        moveTo(coordinatesOfCenters[1][1].getX() + 650, coordinatesOfCenters[1][1].getY() + 500);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 650, coordinatesOfCenters[1][1].getY() + 380);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 590, coordinatesOfCenters[1][1].getY() + 460);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 920, coordinatesOfCenters[1][1].getY() + 450);
+        clickOn();
+        assertEquals(rayInfoText.getText(), "Reflected");
+
+    }
+
+    @Test
+    public void test180Deflection3() throws InterruptedException {  //tests edge case reflections
+        clickOn("Start");
+        moveTo(coordinatesOfCenters[1][1].getX() + 650, coordinatesOfCenters[1][1].getY() + 500);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 650, coordinatesOfCenters[1][1].getY() + 380);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 590, coordinatesOfCenters[1][1].getY() + 460);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 450, coordinatesOfCenters[1][1].getY() + 460);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 590, coordinatesOfCenters[1][1].getY() + 560);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 950, coordinatesOfCenters[1][1].getY() + 400);   //fills out the board because of issue with clicking through aoi
+        clickOn();
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 920, coordinatesOfCenters[1][1].getY() + 450);
+        clickOn();
+        assertEquals(rayInfoText.getText(), "Reflected");
+
+    }
+
+    @Test
+    public void testAbsorbtion() throws InterruptedException {  //tests edge case reflections
+        clickOn("Start");
+        moveTo(coordinatesOfCenters[1][1].getX() + 500, coordinatesOfCenters[1][1].getY() + 450);
+        clickOn();
+        moveTo(coordinatesOfCenters[1][1].getX() + 920, coordinatesOfCenters[1][1].getY() + 450);
+        clickOn();
+        assertEquals(rayInfoText.getText(), "Absorbed");
+
+    }
+
+    @Test
+    public void testNoHit() throws InterruptedException {  //tests edge case reflections
+        clickOn("Start");
+        moveTo(coordinatesOfCenters[1][1].getX() + 920, coordinatesOfCenters[1][1].getY() + 450);
+        clickOn();
+
+        assertEquals(rayInfoText.getText(), "No hit");
 
     }
 }

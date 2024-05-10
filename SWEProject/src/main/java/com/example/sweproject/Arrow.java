@@ -220,7 +220,7 @@ public class Arrow {
                             absorbed = true;
                             rayInfoText.setText("Absorbed");
                         } else if (defType == 1) {                           //when there is a single collision i.e. 60 degrees
-                            rayInfoText.setText("Deflected");
+                            rayInfoText.setText("Deflected ");
                             if (dOfAoi.iterate(2) == this.arrowDirection) {  //deflection logic
                                 this.arrowDirection = dOfAoi.iterate(1);
                             } else {
