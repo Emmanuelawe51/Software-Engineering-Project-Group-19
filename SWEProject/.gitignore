@@ -30,3 +30,7 @@ build/
 
 # macOS
 .DS_Store
+.idea/
+*.iml
+target/
+.vscode/
